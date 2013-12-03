@@ -18,9 +18,11 @@ public class Processor {
     
     public int offset;
     public ItemStack block;
+    public Block override = null;
     public Block dispenser; 
     public ModifierType mode;
     public BlockFace train = null;
+    public boolean applyPhysics = true;
     
     public Processor(HashMap<ModifierType, ComboBlock> config){
 	this.config = config;
@@ -29,6 +31,7 @@ public class Processor {
     public boolean process(BlockDispenseEvent e){
 	System.out.println("Dispense Event called;");
 	dispenser = e.getBlock();
+	block = e.getItem();
 	for(BlockFace face : faces){
 	    Block possibleModeBlock = dispenser.getRelative(face);
 	    ComboBlock possibleModeCombo = new ComboBlock(possibleModeBlock.getTypeId(), possibleModeBlock.getData());
@@ -46,13 +49,12 @@ public class Processor {
 	    System.out.println(new ComboBlock(b) + " -> " + modifier + " at " + i + " " + train);
 	    if(modifier == null) break;
 	    if(modifier == ModifierType.SKIP) i++;
-	    else{
+	    else if(modifier == ModifierType.OVERRIDE){
+		override = dispenser.getRelative(train, ++i);
+	    }else{
 		boolean success = modifier.callModify(this);
 	    }
-	}
-	
-	
-	return true;
+	}return mode.callModify(this);
     }
     
     public ModifierType getModifierFromConfig(ComboBlock block){

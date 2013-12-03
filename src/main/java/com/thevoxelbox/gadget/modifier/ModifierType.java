@@ -9,6 +9,7 @@ public enum ModifierType {
     AREA(null, Type.SPECIAL, null),
     ADD1(null, Type.OFFSET, null),
     ADD5(null, Type.OFFSET, null),
+    ADD10(null, Type.OFFSET, null),
     ADD25(null, Type.OFFSET, null),
     SUBTRACT1(null, Type.OFFSET, null),
     SUBTRACT5(null, Type.OFFSET, null);

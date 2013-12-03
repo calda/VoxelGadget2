@@ -8,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class VoxelGadget extends JavaPlugin{
     
     protected static final Logger log = Logger.getLogger("Minecraft");
-    public static Server s;
     final GadgetListener listener = new GadgetListener(this);
     
     @Override
@@ -17,7 +16,6 @@ public class VoxelGadget extends JavaPlugin{
 
     @Override
     public void onEnable(){
-        s = this.getServer();
         PluginDescriptionFile pdfFile = this.getDescription();
         log.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
     }

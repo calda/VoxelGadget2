@@ -8,14 +8,10 @@ public class BlockPlaceModifier extends AbstractModifier{
 
     @Override
     public boolean modify(Processor p) {
-	Block change = p.dispenser.getRelative(p.train.getOppositeFace(), p.offset + 1);
-	if(p.override == null){
-	    change.setTypeId(p.block.getTypeId(), p.applyPhysics);
-	    change.setData(p.block.getData().getData(), p.applyPhysics);
-	}else{
-	    change.setTypeId(p.override.getTypeId(), p.applyPhysics);
-	    change.setData(p.override.getData(), p.applyPhysics);
-	}return true;
+	Block existing = p.dispenser.getRelative(p.train.getOppositeFace(), p.offset + 1);
+	if(p.override == null) setBlock(existing, p.block.getTypeId(), (byte)p.block.getData().getData(), p.applyPhysics);
+	else setBlock(existing, p.override.getTypeId(), (byte)p.override.getData(), p.applyPhysics);
+	return true;
     }
 
 }

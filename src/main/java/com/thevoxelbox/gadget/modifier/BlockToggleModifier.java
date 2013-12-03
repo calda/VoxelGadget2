@@ -10,19 +10,9 @@ public class BlockToggleModifier extends AbstractModifier{
     public boolean modify(Processor p) {
         Block existing = p.dispenser.getRelative(p.train.getOppositeFace(), p.offset);
         if(existing.getType() == p.block.getType() && p.block.getData().getData() == existing.getData()){ //dispensed block
-            if(p.override == null){
-                existing.setTypeId(0, p.applyPhysics);
-                existing.setData((byte)0, p.applyPhysics);
-            }else{
-                existing.setTypeId(p.override.getTypeId(), p.applyPhysics);
-                existing.setData(p.override.getData(), p.applyPhysics);
-            }
-        }else{
-            existing.setTypeId(p.block.getTypeId(), p.applyPhysics);
-            existing.setData(p.block.getData().getData(), p.applyPhysics); 
-        }
-    
+            if(p.override == null) setBlock(existing, 0, (byte)0, p.applyPhysics);
+            else setBlock(existing, p.override.getTypeId(), (byte)p.override.getData(), p.applyPhysics);
+        }else setBlock(existing, p.block.getTypeId(), (byte)p.block.getData().getData(), p.applyPhysics);
         return true;
     }
-    
 }

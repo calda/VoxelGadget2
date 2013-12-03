@@ -23,6 +23,7 @@ public class Processor {
     public ModifierType mode;
     public BlockFace train = null;
     public boolean applyPhysics = true;
+    public boolean filterAllowsToPlace = true;
     
     public Processor(HashMap<ModifierType, ComboBlock> config){
 	this.config = config;
@@ -51,7 +52,10 @@ public class Processor {
 	    if(modifier == ModifierType.SKIP) i++;
 	    else if(modifier == ModifierType.OVERRIDE){
 		override = dispenser.getRelative(train, ++i);
-	    }else{
+	    }else if(modifier == ModifierType.FILTER){
+                Block next = dispenser.getRelative(train, ++i);
+                //check filter
+            }else{
 		boolean success = modifier.callModify(this);
 	    }
 	}return mode.callModify(this);

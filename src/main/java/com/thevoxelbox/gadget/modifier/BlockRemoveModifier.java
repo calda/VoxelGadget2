@@ -8,9 +8,8 @@ public class BlockRemoveModifier extends AbstractModifier{
 
     @Override
     public boolean modify(Processor p) {
-	Block change = p.dispenser.getRelative(p.train.getOppositeFace(), p.offset + 1);
-	change.setTypeId(0, p.applyPhysics);
-	change.setData((byte)0, p.applyPhysics);
+	Block existing = p.dispenser.getRelative(p.train.getOppositeFace(), p.offset + 1);
+	setBlock(existing, 0,(byte)0, p.applyPhysics);
 	return true;
     }
 

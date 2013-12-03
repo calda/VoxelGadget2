@@ -2,11 +2,12 @@
 package com.thevoxelbox.gadget.modifier;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 public class ComboBlock {
 
-    final private int id;
-    final private byte data;
+    final public int id;
+    final public byte data;
     
     public ComboBlock(int id){
 	this(id, (byte)0);
@@ -15,6 +16,10 @@ public class ComboBlock {
     public ComboBlock(int id, byte data){
 	this.id = id;
 	this.data = data;
+    }
+    
+    public ComboBlock(Block block){
+	this(block.getTypeId(), block.getData());
     }
     
     public ComboBlock(Material mat){
@@ -31,6 +36,11 @@ public class ComboBlock {
     
     public byte getData(){
 	return data;
+    }
+    
+    @Override
+    public String toString(){
+	return "ComboBlock[id=" + id + "; data=" + data + "]";
     }
     
 }

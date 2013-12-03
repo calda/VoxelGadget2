@@ -5,6 +5,6 @@ import com.thevoxelbox.gadget.Processor;
 
 public abstract class AbstractModifier {
 
-    public abstract void modify(Processor p);
+    public abstract boolean modify(Processor p);
     
 }

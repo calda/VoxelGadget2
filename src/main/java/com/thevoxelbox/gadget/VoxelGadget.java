@@ -1,7 +1,7 @@
 package com.thevoxelbox.gadget;
 
 import java.util.logging.Logger;
-import org.bukkit.Server;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,5 +18,7 @@ public class VoxelGadget extends JavaPlugin{
     public void onEnable(){
         PluginDescriptionFile pdfFile = this.getDescription();
         log.info(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
+	Bukkit.getServer().getPluginManager().registerEvents(listener, this);
+	listener.loadConfig();
     }
 }

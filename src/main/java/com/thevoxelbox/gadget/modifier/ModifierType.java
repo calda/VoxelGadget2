@@ -1,29 +1,44 @@
 
 package com.thevoxelbox.gadget.modifier;
 
+import com.thevoxelbox.gadget.Processor;
+import org.bukkit.Material;
+
 public enum ModifierType {
-    PLACE(null, Type.MODE, null),
-    TOGGLE(null, Type.MODE, null),
-    REMOVE(null, Type.MODE, null),
-    SUCKER(null, Type.MODE, null),
-    AREA(null, Type.SPECIAL, null),
-    ADD1(null, Type.OFFSET, null),
-    ADD5(null, Type.OFFSET, null),
-    ADD10(null, Type.OFFSET, null),
-    ADD25(null, Type.OFFSET, null),
-    SUBTRACT1(null, Type.OFFSET, null),
-    SUBTRACT5(null, Type.OFFSET, null);
+    PLACE(null, Type.MODE, new ComboBlock(Material.IRON_BLOCK)),
+    TOGGLE(null, Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
+    REMOVE(null, Type.MODE, new ComboBlock(Material.DIAMOND_BLOCK)),
+    SUCKER(null, Type.MODE, new ComboBlock(Material.GOLD_BLOCK)),
+    INVENTORY(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)1)),
+    FINITE_TOGGLE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)13)),
+    LINE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)2)),
+    AREA(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)1)),
+    FILTER(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)4)),
+    SKIP(new OffsetModifier(0), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)0)),
+    DUMMY(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)6)),
+    ADD1(new OffsetModifier(1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte)9)),
+    ADD5(new OffsetModifier(5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte)11)),
+    ADD10(new OffsetModifier(10), Type.OFFSET, new ComboBlock(Material.WOOL, (byte)10)),
+    ADD25(new OffsetModifier(25), Type.OFFSET, new ComboBlock(Material.WOOL, (byte)3)),
+    SUBTRACT1(new OffsetModifier(-1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte)5)),
+    SUBTRACT5(new OffsetModifier(-5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte)15));
     
-    private final Class c;
+    private final AbstractModifier modifier;
     private final ComboBlock defaultBlock;
+    private final Type type;
     
-    private ModifierType(Class c, Type type, ComboBlock defaultBlock){
-	this.c = c;
+    private ModifierType(AbstractModifier modifier, Type type, ComboBlock defaultBlock){
+	this.modifier = modifier;
 	this.defaultBlock = defaultBlock;
+	this.type = type;
     }
     
-    public Class getClassLocation(){
-	return c;
+    public boolean callModify(Processor p){
+	return modifier.modify(p);
+    }
+    
+    public Type getType(){
+	return type;
     }
     
     public ComboBlock getDefaultBlock(){

@@ -6,7 +6,7 @@ import org.bukkit.Material;
 
 public enum ModifierType {
     PLACE(new BlockPlaceModifier(), Type.MODE, new ComboBlock(Material.IRON_BLOCK)),
-    TOGGLE(null, Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
+    TOGGLE(new BlockToggleModifier(), Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
     REMOVE(new BlockRemoveModifier(), Type.MODE, new ComboBlock(Material.DIAMOND_BLOCK)),
     SUCKER(null, Type.MODE, new ComboBlock(Material.GOLD_BLOCK)),
     NO_PHYSICS(new NoPhysicsModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)8)),

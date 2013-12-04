@@ -2,6 +2,7 @@
 ## Eclipse
 #################
 
+.netbeans_automatic_build
 *.pydevproject
 .project
 .metadata

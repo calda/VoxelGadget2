@@ -23,8 +23,7 @@ class InventoryModifier extends AbstractModifier {
 	    }
 	}Random r = new Random();
 	System.out.println(similars);
-	p.offset = similars.get(r.nextInt(similars.size())).getAmount();
-	System.out.println(p.offset);
+	p.setOffset(similars.get(r.nextInt(similars.size())).getAmount());
 	return true;
     }
 

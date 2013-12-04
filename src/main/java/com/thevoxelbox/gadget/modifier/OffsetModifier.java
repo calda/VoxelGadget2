@@ -13,10 +13,9 @@ public class OffsetModifier extends AbstractModifier{
     
     @Override
     public boolean modify(Processor p) {
-	p.offset += offset;
-	if(p.offset > 100) p.offset = 100;
-	else if(p.offset < 0) p.offset = 0;
-	System.out.println("offset = " + p.offset);
+	p.addOffset(offset);
+	if(p.getOffset() > 100) p.setOffset(100);
+	else if(p.getOffset() < 1) p.setOffset(1);
 	return true;
     }
 

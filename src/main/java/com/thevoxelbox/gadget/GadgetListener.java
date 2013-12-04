@@ -3,16 +3,16 @@ package com.thevoxelbox.gadget;
 import static com.thevoxelbox.gadget.VoxelGadget.log;
 import com.thevoxelbox.gadget.modifier.ComboBlock;
 import com.thevoxelbox.gadget.modifier.ModifierType;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.Scanner;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 
 public class GadgetListener implements Listener{
     
+    final static String gadgetText = ChatColor.DARK_GRAY + "[" + ChatColor.LIGHT_PURPLE + "Voxel" + 
+	    ChatColor.DARK_PURPLE + "Gadget" + ChatColor.DARK_GRAY + "] " + ChatColor.GRAY;
     final VoxelGadget gadget;
     final HashMap<ModifierType, ComboBlock> config = new HashMap<ModifierType, ComboBlock>();
     

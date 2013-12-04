@@ -5,14 +5,14 @@ import com.thevoxelbox.gadget.Processor;
 import org.bukkit.Material;
 
 public enum ModifierType {
-    PLACE(new BlockPlaceModifier(), Type.MODE, new ComboBlock(Material.IRON_BLOCK)),
-    TOGGLE(new BlockToggleModifier(), Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
-    REMOVE(new BlockRemoveModifier(), Type.MODE, new ComboBlock(Material.DIAMOND_BLOCK)),
+    PLACE(new BlockPlaceMode(), Type.MODE, new ComboBlock(Material.IRON_BLOCK)),
+    TOGGLE(new BlockToggleMode(), Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
+    REMOVE(new BlockRemoveMode(), Type.MODE, new ComboBlock(Material.DIAMOND_BLOCK)),
     SUCKER(null, Type.MODE, new ComboBlock(Material.GOLD_BLOCK)),
     NO_PHYSICS(new NoPhysicsModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)8)),
     OVERRIDE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)14)),
     INVENTORY(new InventoryModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)12)),
-    FINITE_TOGGLE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)13)),
+    FINITE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)13)),
     LINE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)2)),
     AREA(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)1)),
     FILTER(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)4)),
@@ -38,6 +38,11 @@ public enum ModifierType {
     public boolean callModify(Processor p){
 	if(modifier != null) return modifier.modify(p);
 	return true;
+    }
+    
+    public boolean callModeModify(Processor p){
+	if(modifier instanceof AbstractModeModifier) return ((AbstractModeModifier)modifier).modeModify(p);
+	else return false;
     }
     
     public Type getType(){

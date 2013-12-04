@@ -16,9 +16,15 @@ public class Processor {
     final HashMap<ModifierType, ComboBlock> config;
     final BlockFace[] faces = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
     
-    public int offset;
+    private int offset = 1;
+    private int size = 0;
+    public boolean areaEnabled = false;
+    public boolean lineEnabled = false;
+    public boolean finite = false;
     public ItemStack block;
     public Block override = null;
+    public boolean overrideAbsolute = false;
+    public Block filter = null;
     public Block dispenser; 
     public ModifierType mode;
     public BlockFace train = null;
@@ -51,14 +57,24 @@ public class Processor {
 	    if(modifier == null) break;
 	    if(modifier == ModifierType.SKIP) i++;
 	    else if(modifier == ModifierType.OVERRIDE){
-		override = dispenser.getRelative(train, ++i);
+		if(override != null){
+		    ModifierType twoAgo = getModifierFromConfig(new ComboBlock(b.getRelative(train.getOppositeFace(), 2)));
+		    if(twoAgo == ModifierType.OVERRIDE) overrideAbsolute = true;
+		}else override = dispenser.getRelative(train, ++i);
 	    }else if(modifier == ModifierType.FILTER){
-                Block next = dispenser.getRelative(train, ++i);
-                //check filter
-            }else{
+                filter = dispenser.getRelative(train, ++i);
+            }else if(modifier == ModifierType.AREA){
+		areaEnabled = true;
+		lineEnabled = false;
+	    }else if(modifier == ModifierType.LINE){
+		lineEnabled = true;
+		areaEnabled = false;
+	    }else if(modifier == ModifierType.FINITE){
+		finite = true;
+	    }else{
 		boolean success = modifier.callModify(this);
 	    }
-	}return mode.callModify(this);
+	}return mode.callModeModify(this);
     }
     
     public ModifierType getModifierFromConfig(ComboBlock block){
@@ -69,6 +85,29 @@ public class Processor {
 		}else return type.getKey();
 	    }
 	}return null;
+    }
+    
+    public void addOffset(int add){
+	if(areaEnabled || lineEnabled) addSize(add);
+	else offset += add;
+    }
+    
+    public void setOffset(int newOffset){
+	offset = newOffset + 1;
+    }
+    
+    public int getOffset(){
+	return offset;
+    }
+    
+    public void addSize(int add){
+	size += add;
+	if(size > 100) size = 100;
+	else if(size < 1) size = 1;
+    }
+    
+    public int getSize(){
+	return size;
     }
     
 }

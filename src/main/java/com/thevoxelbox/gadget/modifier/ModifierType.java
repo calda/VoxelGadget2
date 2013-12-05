@@ -12,7 +12,7 @@ public enum ModifierType {
     NO_PHYSICS(new NoPhysicsModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)8)),
     OVERRIDE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)14)),
     INVENTORY(new InventoryModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)12)),
-    TIMER(null, Type.SPECIAL, new ComboBlock(159, (byte)15)),
+    TIMER(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)7)),
     FINITE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)13)),
     LINE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)2)),
     AREA(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)1)),

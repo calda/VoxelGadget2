@@ -1,0 +1,36 @@
+#Keeps track of what version your config is in case a new
+#modifier is released and needs to be added to your config.
+CONFIG_VERSION: 2
+AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE: true
+
+#If false, will force Gadget to act like the Finite Block Modifier
+#is always present in a gadget's tail.
+INFINITE_BLOCKS: true
+
+#Remove or comment out line to remove a modifier from Gadget
+#Format: dataValue:ink
+#        an ink (data) of 0 is assumed if not included.
+#To reset the config to default settings, delete it. The default config
+#will be added upon the next load of the plugin.
+#If two modifiers are configured to use the same block, the one higher on the list
+#will automatically take priority.
+PLACE: "42"
+TOGGLE: "22"
+REMOVE: "57"
+SUCKER: "41"
+NO_PHYSICS: "35:8"
+OVERRIDE: "35:14"
+INVENTORY: "35:12"
+TIMER: "159:15"
+FINITE: "35:13"
+LINE: "35:2"
+AREA: "35:1"
+FILTER: "35:4"
+SKIP: "35"
+DUMMY: "35:6"
+ADD1: "35:9"
+ADD5: "35:11"
+ADD10: "35:10"
+ADD25: "35:3"
+SUBTRACT1: "35:5"
+SUBTRACT5: "35:15"

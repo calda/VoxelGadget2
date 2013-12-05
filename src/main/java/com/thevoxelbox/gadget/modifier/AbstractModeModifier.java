@@ -2,8 +2,12 @@
 package com.thevoxelbox.gadget.modifier;
 
 import com.thevoxelbox.gadget.Processor;
+import java.util.Arrays;
+import java.util.HashMap;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dispenser;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -18,24 +22,16 @@ public abstract class AbstractModeModifier extends AbstractModifier{
     }
     
     protected void setBlock(Block existing, int newID, byte newData, boolean applyPhysics, Processor p){
+	Dispenser d = (Dispenser) p.dispenser.getState();
+	if(newID == 46 && (p.override == null || p.override.getTypeId() != 46)){ //tnt; not overriden
+	    if(!p.finite || processFinite(existing, newID, newData, d)) existing.getWorld().spawnEntity(existing.getLocation(), EntityType.PRIMED_TNT);
+	    return;
+	}
         if(existing.getState() instanceof InventoryHolder){
             if(newID == 0) return;
             InventoryHolder invBlock = (InventoryHolder) existing.getState();
             Inventory i = invBlock.getInventory();
-	    boolean preExisting = false;
-	    boolean containsEmptySlot = false;
-            for(ItemStack item : i.getContents()){
-                if(item == null) containsEmptySlot = true;
-		else{
-		    if(item.getTypeId() == newID && item.getData().getData() == newData && item.getAmount() != item.getMaxStackSize()){
-			item.setAmount(item.getAmount() + 1);
-			preExisting = true;
-			break;
-		    }
-		}
-            }if(!preExisting && containsEmptySlot){
-		i.addItem(new ItemStack(newID, newData));
-	    }
+	    if(i.firstEmpty() != -1 && (!p.finite || processFinite(existing, newID, newData, d))) i.addItem(new ItemStack(newID, 1, newData));
         }else{
 	    if(p.areaEnabled){
 		int radius = p.getSize();
@@ -50,24 +46,51 @@ public abstract class AbstractModeModifier extends AbstractModifier{
 			}else if(p.train == BlockFace.UP || p.train == BlockFace.DOWN){
 			    set = existing.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
 			}if(set != null){
-			    set.setTypeId(newID, applyPhysics);
-			    set.setData(newData, applyPhysics); 
+			    if(!p.finite || processFinite(set, newID, newData, d)){
+				set.setTypeId(newID, applyPhysics);
+				set.setData(newData, applyPhysics); 
+			    }
 			}	
 		    }
 		}
-	    }if(p.lineEnabled){
+	    }else if(p.lineEnabled){
 		int length = p.getOffset();
 		int offset = p.getSize();
 		for(int i = 0; i < length; i++){
 		    Block set = p.dispenser.getRelative(p.train.getOppositeFace(), i + offset + 2);
-		    set.setTypeId(newID, applyPhysics);
-		    set.setData(newData, applyPhysics); 
+		    if(!p.finite || processFinite(set, newID, newData, d)){
+			set.setTypeId(newID, applyPhysics);
+			set.setData(newData, applyPhysics); 
+		    }
 		}
 	    }else{
-		existing.setTypeId(newID, applyPhysics);
-		existing.setData(newData, applyPhysics); 
+		if(!p.finite || processFinite(existing, newID, newData, d)){
+		    existing.setTypeId(newID, applyPhysics);
+		    existing.setData(newData, applyPhysics); 
+		}
 	    }
         }
+    }
+    
+    protected boolean processFinite(Block existing, int newID, byte newData, Dispenser disp){
+	Inventory i = disp.getInventory();
+	if(newID == 0){
+	    HashMap<Integer, ItemStack> notAdded = i.addItem(new ItemStack(existing.getTypeId(), 1, existing.getData()));
+	    return notAdded.isEmpty();
+	}else{
+	    if(existing.getTypeId() == newID && existing.getData() == newData) return false;
+	    boolean success = true;
+	    HashMap<Integer, ItemStack> notRemoved = i.removeItem(new ItemStack(newID, 1, newData));
+	    if(!notRemoved.isEmpty()){
+		success = false;
+	    }if(existing.getTypeId() != 0 && !(existing.getState() instanceof InventoryHolder)){	
+		HashMap<Integer, ItemStack> notAdded = i.addItem(new ItemStack(existing.getTypeId(), 1, existing.getData()));
+		if(!notAdded.isEmpty()){
+		    success = false;
+		    i.addItem(new ItemStack(newID, 1, newData));
+		}
+	    }return success;
+	}
     }
     
 }

@@ -8,10 +8,11 @@ public enum ModifierType {
     PLACE(new BlockPlaceMode(), Type.MODE, new ComboBlock(Material.IRON_BLOCK)),
     TOGGLE(new BlockToggleMode(), Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
     REMOVE(new BlockRemoveMode(), Type.MODE, new ComboBlock(Material.DIAMOND_BLOCK)),
-    SUCKER(null, Type.MODE, new ComboBlock(Material.GOLD_BLOCK)),
+    SUCKER(new BlockSuckerMode(), Type.MODE, new ComboBlock(Material.GOLD_BLOCK)),
     NO_PHYSICS(new NoPhysicsModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)8)),
     OVERRIDE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)14)),
     INVENTORY(new InventoryModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)12)),
+    TIMER(null, Type.SPECIAL, new ComboBlock(159, (byte)15)),
     FINITE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)13)),
     LINE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)2)),
     AREA(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte)1)),
@@ -54,7 +55,7 @@ public enum ModifierType {
     }
     
     public enum Type{
-	MODE, OFFSET, SPECIAL;
+	MODE, OFFSET, SPECIAL, FUN;
     }
     
 }

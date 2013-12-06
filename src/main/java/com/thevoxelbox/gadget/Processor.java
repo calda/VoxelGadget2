@@ -53,7 +53,7 @@ public class Processor {
 		break;
 	    }
 	}if(train == null) return false;
-	if(mode == ModifierType.SUCKER) return mode.callModeModify(this);
+	if(mode == ModifierType.SUCKER || !initial) return mode.callModeModify(this);
 	for(int i = 2; i < 64; i++){
 	    Block b = dispenser.getRelative(train, i);
 	    ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
@@ -79,7 +79,7 @@ public class Processor {
 	    }else{
 		modifier.callModify(this);
 	    }
-	}if(initial){
+	}if(initial && timerEnabled){
 	    final Processor owner = this;
 	    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(gadget, new Runnable(){
 		public void run() {
@@ -101,6 +101,7 @@ public class Processor {
     }
     
     public void addOffset(int add){
+	System.out.println("Adding " + add + " offset");
 	if(timerEnabled) delay += add * 2;
 	else if(areaEnabled || lineEnabled) addSize(add);
 	else offset += add;
@@ -115,6 +116,7 @@ public class Processor {
     }
     
     public void addSize(int add){
+	System.out.println("Adding " + add + "size");
 	size += add;
 	if(size > 100) size = 100;
 	else if(size < 1) size = 1;

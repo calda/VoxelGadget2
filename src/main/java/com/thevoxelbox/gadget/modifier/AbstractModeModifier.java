@@ -34,17 +34,19 @@ public abstract class AbstractModeModifier extends AbstractModifier{
 	    if(i.firstEmpty() != -1 && (!p.finite || processFinite(existing, newID, newData, d))) i.addItem(new ItemStack(newID, 1, newData));
         }else{
 	    if(p.areaEnabled){
-		int radius = p.getSize();
+		int radius = p.getOffset() - 1;
+		int offset = p.getSize();
 		if(radius > 5) radius = 5;
+		Block center = p.dispenser.getRelative(p.train.getOppositeFace(), offset + 1);
 		for(int i = 0 - radius; i <= radius; i++){
 		    for(int j = 0 - radius; j <= radius; j++){
 			Block set = null;
 			if(p.train == BlockFace.EAST || p.train == BlockFace.WEST){
-			    set = existing.getRelative(BlockFace.UP, i).getRelative(BlockFace.SOUTH, j);
+			    set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.SOUTH, j);
 			}else if(p.train == BlockFace.NORTH || p.train == BlockFace.SOUTH){
-			    set = existing.getRelative(BlockFace.UP, i).getRelative(BlockFace.EAST, j);
+			    set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.EAST, j);
 			}else if(p.train == BlockFace.UP || p.train == BlockFace.DOWN){
-			    set = existing.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
+			    set = center.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
 			}if(set != null){
 			    if(!p.finite || processFinite(set, newID, newData, d)){
 				set.setTypeId(newID, applyPhysics);
@@ -54,7 +56,7 @@ public abstract class AbstractModeModifier extends AbstractModifier{
 		    }
 		}
 	    }else if(p.lineEnabled){
-		int length = p.getOffset();
+		int length = p.getOffset() - 1;
 		int offset = p.getSize();
 		for(int i = 0; i < length; i++){
 		    Block set = p.dispenser.getRelative(p.train.getOppositeFace(), i + offset + 2);

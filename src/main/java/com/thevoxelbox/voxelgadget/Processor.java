@@ -1,4 +1,3 @@
-
 package com.thevoxelbox.voxelgadget;
 
 import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
@@ -83,7 +82,6 @@ public class Processor {
 	    final Processor owner = this;
 	    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(gadget, new Runnable(){
 		public void run() {
-		    System.out.println("Running gadget again.");
 		    owner.process(dispenser, block, finite);
 		}
 	    }, delay);

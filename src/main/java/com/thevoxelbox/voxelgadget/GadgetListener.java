@@ -1,8 +1,8 @@
-package com.thevoxelbox.gadget;
+package com.thevoxelbox.voxelgadget;
 
-import static com.thevoxelbox.gadget.VoxelGadget.log;
-import com.thevoxelbox.gadget.modifier.ComboBlock;
-import com.thevoxelbox.gadget.modifier.ModifierType;
+import static com.thevoxelbox.voxelgadget.VoxelGadget.log;
+import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
+import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.io.File;
 import java.util.HashMap;
 import org.bukkit.ChatColor;

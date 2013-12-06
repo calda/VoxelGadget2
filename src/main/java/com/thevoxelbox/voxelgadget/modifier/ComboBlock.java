@@ -1,5 +1,5 @@
 
-package com.thevoxelbox.gadget.modifier;
+package com.thevoxelbox.voxelgadget.modifier;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;

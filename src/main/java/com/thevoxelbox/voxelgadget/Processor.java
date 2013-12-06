@@ -1,8 +1,8 @@
 
-package com.thevoxelbox.gadget;
+package com.thevoxelbox.voxelgadget;
 
-import com.thevoxelbox.gadget.modifier.ComboBlock;
-import com.thevoxelbox.gadget.modifier.ModifierType;
+import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
+import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.bukkit.Bukkit;

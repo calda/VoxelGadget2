@@ -83,7 +83,7 @@ public class Processor {
 	    final Processor owner = this;
 	    Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(gadget, new Runnable(){
 		public void run() {
-		    System.out.println("Running voxelgadget again.");
+		    System.out.println("Running gadget again.");
 		    owner.process(dispenser, block, finite);
 		}
 	    }, delay);

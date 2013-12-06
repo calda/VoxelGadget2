@@ -37,6 +37,7 @@ public abstract class AbstractModeModifier extends AbstractModifier{
 		int radius = p.getOffset() - 1;
 		int offset = p.getSize();
 		if(radius > 5) radius = 5;
+		if(offset == -1) offset = 0;
 		Block center = p.dispenser.getRelative(p.train.getOppositeFace(), offset + 1);
 		for(int i = 0 - radius; i <= radius; i++){
 		    for(int j = 0 - radius; j <= radius; j++){
@@ -58,6 +59,7 @@ public abstract class AbstractModeModifier extends AbstractModifier{
 	    }else if(p.lineEnabled){
 		int length = p.getOffset() - 1;
 		int offset = p.getSize();
+		//System.out.println("l:" + length + " o:" + offset);
 		for(int i = 0; i < length; i++){
 		    Block set = p.dispenser.getRelative(p.train.getOppositeFace(), i + offset + 2);
 		    if(!p.finite || processFinite(set, newID, newData, d)){

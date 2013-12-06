@@ -101,7 +101,6 @@ public class Processor {
     }
     
     public void addOffset(int add){
-	System.out.println("Adding " + add + " offset");
 	if(timerEnabled) delay += add * 2;
 	else if(areaEnabled || lineEnabled) addSize(add);
 	else offset += add;
@@ -116,10 +115,9 @@ public class Processor {
     }
     
     public void addSize(int add){
-	System.out.println("Adding " + add + "size");
 	size += add;
 	if(size > 100) size = 100;
-	else if(size < 1) size = 1;
+	else if(size < -1) size = -1;
     }
     
     public int getSize(){

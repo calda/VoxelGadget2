@@ -1,8 +1,8 @@
 
-package com.thevoxelbox.gadget.modifier;
+package com.thevoxelbox.voxelgadget.modifier;
 
-import com.thevoxelbox.gadget.Processor;
-import java.util.Arrays;
+import com.thevoxelbox.voxelgadget.Processor;
+
 import java.util.HashMap;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

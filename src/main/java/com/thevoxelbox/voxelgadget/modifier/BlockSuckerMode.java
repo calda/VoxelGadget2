@@ -1,7 +1,7 @@
 
-package com.thevoxelbox.gadget.modifier;
+package com.thevoxelbox.voxelgadget.modifier;
 
-import com.thevoxelbox.gadget.Processor;
+import com.thevoxelbox.voxelgadget.Processor;
 import java.util.HashMap;
 import java.util.List;
 import org.bukkit.block.Dispenser;

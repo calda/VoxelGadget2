@@ -1,4 +1,4 @@
-package com.thevoxelbox.gadget;
+package com.thevoxelbox.voxelgadget;
 
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;

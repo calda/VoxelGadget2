@@ -13,8 +13,8 @@ public class BlockSuckerMode extends AbstractModeModifier {
 
     @Override
     public boolean modify(Processor p) {
-        Dispenser d = (Dispenser) p.dispenser.getState();
-        List<Entity> near = p.dispenser.getLocation().getWorld().getEntities();
+        Dispenser d = (Dispenser) p.getDispenser().getState();
+        List<Entity> near = p.getDispenser().getLocation().getWorld().getEntities();
         for (Entity e : near) {
             if (e.getLocation().distance(d.getLocation()) <= 10) {
                 if (e.getType() == EntityType.DROPPED_ITEM) {

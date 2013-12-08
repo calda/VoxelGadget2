@@ -3,10 +3,13 @@ package com.thevoxelbox.voxelgadget.modifier;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+/**
+ * A combined class to store the ID and data/ink of a block
+ */
 public class ComboBlock {
 
-    final public int id;
-    final public byte data;
+    final private int id;
+    final private byte data;
 
     public ComboBlock(int id) {
         this(id, (byte) 0);

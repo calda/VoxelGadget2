@@ -26,6 +26,10 @@ public enum ModifierType {
     SUBTRACT1(new OffsetModifier(-1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 5)),
     SUBTRACT5(new OffsetModifier(-5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 15));
 
+    public enum Type {
+        MODE, OFFSET, SPECIAL, FUN;
+    }
+    
     private final AbstractModifier modifier;
     private final ComboBlock defaultBlock;
     private final Type type;
@@ -36,27 +40,38 @@ public enum ModifierType {
         this.type = type;
     }
 
+    /**
+     * Calls the modify() method of the Modifier
+     * @param p the Processor that called the method
+     * @return true if the modifications were successful
+     */
     public boolean callModify(Processor p) {
         if (modifier != null) return modifier.modify(p);
         return true;
     }
 
+    /**
+     * Calls the modeModify() method of the Mode Modifier
+     * @param p the Processor that called the method
+     * @return false if the Modifier is not a Mode Modifier
+     */
     public boolean callModeModify(Processor p) {
         if (modifier instanceof AbstractModeModifier) return ((AbstractModeModifier) modifier).modeModify(p);
         else return false;
     }
 
+    /**
+     * @return the Type of the ModeModifier
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     * @return The default block for the Modifier. Used in generating the default configuration.
+     */
     public ComboBlock getDefaultBlock() {
         return defaultBlock;
-    }
-
-    public enum Type {
-
-        MODE, OFFSET, SPECIAL, FUN;
     }
 
 }

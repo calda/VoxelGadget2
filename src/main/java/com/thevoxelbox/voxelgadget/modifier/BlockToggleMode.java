@@ -10,14 +10,14 @@ public class BlockToggleMode extends AbstractModeModifier {
 
     @Override
     public boolean modify(Processor p) {
-        Block existing = p.dispenser.getRelative(p.train.getOppositeFace(), (p.lineEnabled || p.areaEnabled ? p.getSize() + (p.lineEnabled ? 2 : 1) : p.getOffset()));
-        if (p.overrideAbsolute) {
-            if (existing.getTypeId() == p.override.getTypeId() && existing.getData() == p.override.getData()) {
-                setBlock(existing, 0, (byte) 0, p.applyPhysics, p);
-            } else setBlock(existing, p.override.getTypeId(), (byte) p.override.getData(), p.applyPhysics, p);
+        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), (p.isLineEnabled() || p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
+        if (p.isOverrideAbsolute()) {
+            if (existing.getTypeId() == p.getOverride().getTypeId() && existing.getData() == p.getOverride().getData()) {
+                setBlock(existing, 0, (byte) 0, p.applyPhysics(), p);
+            } else setBlock(existing, p.getOverride().getTypeId(), (byte) p.getOverride().getData(), p.applyPhysics(), p);
             return true;
         }
-        Block dispenser = p.dispenser;
+        Block dispenser = p.getDispenser();
         Dispenser disp = (Dispenser) dispenser.getState();
         Inventory inv = disp.getInventory();
         boolean existingInDispenser = false;
@@ -28,9 +28,9 @@ public class BlockToggleMode extends AbstractModeModifier {
             }
         }
         if (existingInDispenser) { //dispensed block
-            if (p.override == null) setBlock(existing, 0, (byte) 0, p.applyPhysics, p);
-            else setBlock(existing, p.override.getTypeId(), (byte) p.override.getData(), p.applyPhysics, p);
-        } else setBlock(existing, p.block.getTypeId(), (byte) p.block.getData().getData(), p.applyPhysics, p);
+            if (p.getOverride() == null) setBlock(existing, 0, (byte) 0, p.applyPhysics(), p);
+            else setBlock(existing, p.getOverride().getTypeId(), (byte) p.getOverride().getData(), p.applyPhysics(), p);
+        } else setBlock(existing, p.getBlock().getTypeId(), (byte) p.getBlock().getData().getData(), p.applyPhysics(), p);
         return true;
     }
 }

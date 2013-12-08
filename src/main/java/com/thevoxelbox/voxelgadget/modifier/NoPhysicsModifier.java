@@ -6,7 +6,7 @@ public class NoPhysicsModifier extends AbstractModifier {
 
     @Override
     public boolean modify(Processor p) {
-        p.applyPhysics = false;
+        p.setApplyPhysics(false);
         return true;
     }
 

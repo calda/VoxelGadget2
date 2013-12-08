@@ -2,6 +2,9 @@ package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
 
+/**
+ * A special Modifier to easily create multiple OffsetModifiers which all do the same thing with different values.
+ */
 public class OffsetModifier extends AbstractModifier {
 
     final private int offset;

@@ -7,9 +7,9 @@ public class BlockPlaceMode extends AbstractModeModifier {
 
     @Override
     public boolean modify(Processor p) {
-        Block existing = p.dispenser.getRelative(p.train.getOppositeFace(), p.getOffset());
-        if (p.override == null) setBlock(existing, p.block.getTypeId(), (byte) p.block.getData().getData(), p.applyPhysics, p);
-        else setBlock(existing, p.override.getTypeId(), (byte) p.override.getData(), p.applyPhysics, p);
+        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+        if (p.getOverride() == null) setBlock(existing, p.getBlock().getTypeId(), (byte) p.getBlock().getData().getData(), p.applyPhysics(), p);
+        else setBlock(existing, p.getOverride().getTypeId(), (byte) p.getOverride().getData(), p.applyPhysics(), p);
         return true;
     }
 

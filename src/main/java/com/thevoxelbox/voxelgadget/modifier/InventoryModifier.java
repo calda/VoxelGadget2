@@ -13,11 +13,11 @@ class InventoryModifier extends AbstractModifier {
     @Override
     public boolean modify(Processor p) {
         ArrayList<ItemStack> similars = new ArrayList<ItemStack>();
-        Block dispenser = p.dispenser;
+        Block dispenser = p.getDispenser();
         Dispenser disp = (Dispenser) dispenser.getState();
         Inventory inv = disp.getInventory();
         for (ItemStack item : inv.getContents()) {
-            if (item != null && item.getTypeId() == p.block.getTypeId() && item.getData().getData() == p.block.getData().getData()) {
+            if (item != null && item.getTypeId() == p.getBlock().getTypeId() && item.getData().getData() == p.getBlock().getData().getData()) {
                 similars.add(item);
             }
         }

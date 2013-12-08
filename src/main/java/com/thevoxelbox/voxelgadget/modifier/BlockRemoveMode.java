@@ -7,8 +7,8 @@ public class BlockRemoveMode extends AbstractModeModifier {
 
     @Override
     public boolean modify(Processor p) {
-        Block existing = p.dispenser.getRelative(p.train.getOppositeFace(), p.getOffset());
-        setBlock(existing, 0, (byte) 0, p.applyPhysics, p);
+        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+        setBlock(existing, 0, (byte) 0, p.applyPhysics(), p);
         return true;
     }
 

@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 
 public class GadgetListener implements Listener {
-
+    
     final VoxelGadget gadget;
     final HashMap<ModifierType, ComboBlock> config = new HashMap<ModifierType, ComboBlock>();
     private boolean infiniteBlocks = true;
@@ -19,6 +19,10 @@ public class GadgetListener implements Listener {
         this.gadget = gadget;
     }
 
+    /**
+     * Calls VoxelGadget dispenser logic
+     * @param e Bukkit's BlockDispenseEvent
+     */
     @EventHandler
     public void onDispenserDispense(BlockDispenseEvent e) {
         if (e.getItem().getType().isBlock()) {
@@ -28,6 +32,10 @@ public class GadgetListener implements Listener {
         }
     }
 
+    /**
+     * Loads the configuration for VoxelGadget2.
+     * If there is no config file, it is auto-generated.
+     */
     public void loadConfig() {
         File f = new File("plugins/VoxelGadget/config.yml");
         if (f.exists()) {

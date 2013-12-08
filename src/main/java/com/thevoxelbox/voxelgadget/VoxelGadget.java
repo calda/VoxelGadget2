@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelgadget;
 
+import com.thevoxelbox.voxelgadget.command.GadgetCommand;
 import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +17,7 @@ public class VoxelGadget extends JavaPlugin {
     @Override
     public void onEnable() {
         Bukkit.getServer().getPluginManager().registerEvents(listener, this);
+        getCommand("gadget").setExecutor(new GadgetCommand());
         listener.loadConfig();
     }
 

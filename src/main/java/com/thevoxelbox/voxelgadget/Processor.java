@@ -22,7 +22,6 @@ public class Processor {
     private boolean areaEnabled = false;
     private boolean lineEnabled = false;
     private boolean timerEnabled = false;
-    private boolean finite;
     private ItemStack block;
     private Block override = null;
     private boolean overrideAbsolute = false;
@@ -34,7 +33,6 @@ public class Processor {
 
     public Processor(HashMap<ModifierType, ComboBlock> config, boolean infinite, VoxelGadget gadget) {
         this.config = config;
-        finite = !infinite;
         this.gadget = gadget;
     }
 
@@ -52,7 +50,7 @@ public class Processor {
             }
         }
         if (getTrain() == null) return false;
-        if (getMode() == ModifierType.SUCKER || !initial) return getMode().callModeModify(this);
+        if (!initial) return getMode().callModeModify(this);
         for (int i = 2; i < 64; i++) {
             Block b = dispenser.getRelative(getTrain(), i);
             ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
@@ -73,8 +71,6 @@ public class Processor {
                 setAreaEnabled(false);
             } else if (modifier == ModifierType.TIMER) {
                 setTimerEnabled(true);
-            } else if (modifier == ModifierType.FINITE) {
-                setFinite(true);
             } else {
                 modifier.callModify(this);
             }
@@ -83,7 +79,7 @@ public class Processor {
             final Processor owner = this;
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
                 public void run() {
-                    owner.process(dispenser, block, isFinite());
+                    owner.process(dispenser, block, false);
                 }
             }, getDelay());
         }
@@ -193,20 +189,6 @@ public class Processor {
      */
     public void setTimerEnabled(boolean timerEnabled) {
         this.timerEnabled = timerEnabled;
-    }
-
-    /**
-     * @return the finite
-     */
-    public boolean isFinite() {
-        return finite;
-    }
-
-    /**
-     * @param finite the finite to set
-     */
-    public void setFinite(boolean finite) {
-        this.finite = finite;
     }
 
     /**

@@ -4,3 +4,6 @@ version: ${project.build.version}
 website: ${project.url}
 authors: [CalDaBeast]
 description: ${project.description}
+commands:
+  gadget:
+    description: the main command for use with VoxelGadget2.

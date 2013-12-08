@@ -19,19 +19,18 @@ public class Processor {
     private int offset = 1;
     private int size = 0;
     private int delay = 0;
-    public boolean areaEnabled = false;
-    public boolean lineEnabled = false;
-    public boolean timerEnabled = false;
-    public boolean finite;
-    public ItemStack block;
-    public Block override = null;
-    public boolean overrideAbsolute = false;
-    public Block filter = null;
-    public Block dispenser;
-    public ModifierType mode;
-    public BlockFace train = null;
-    public boolean applyPhysics = true;
-    public boolean filterAllowsToPlace = true;
+    private boolean areaEnabled = false;
+    private boolean lineEnabled = false;
+    private boolean timerEnabled = false;
+    private boolean finite;
+    private ItemStack block;
+    private Block override = null;
+    private boolean overrideAbsolute = false;
+    private Block filter = null;
+    private Block dispenser;
+    private ModifierType mode;
+    private BlockFace train = null;
+    private boolean applyPhysics = true;
 
     public Processor(HashMap<ModifierType, ComboBlock> config, boolean infinite, VoxelGadget gadget) {
         this.config = config;
@@ -41,61 +40,61 @@ public class Processor {
 
     public boolean process(final Block dispenser, final ItemStack block, final boolean initial) {
         this.dispenser = dispenser;
-        this.block = block;
+        this.setBlock(block);
         for (BlockFace face : faces) {
             Block possibleModeBlock = dispenser.getRelative(face);
             ComboBlock possibleModeCombo = new ComboBlock(possibleModeBlock.getTypeId(), possibleModeBlock.getData());
             ModifierType mode = getModifierFromConfig(possibleModeCombo);
             if (mode != null && mode.getType() == ModifierType.Type.MODE) {
-                this.mode = mode;
-                train = face;
+                this.setMode(mode);
+                this.train = face;
                 break;
             }
         }
-        if (train == null) return false;
-        if (mode == ModifierType.SUCKER || !initial) return mode.callModeModify(this);
+        if (getTrain() == null) return false;
+        if (getMode() == ModifierType.SUCKER || !initial) return getMode().callModeModify(this);
         for (int i = 2; i < 64; i++) {
-            Block b = dispenser.getRelative(train, i);
+            Block b = dispenser.getRelative(getTrain(), i);
             ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
             if (modifier == null) break;
             if (modifier == ModifierType.SKIP) i++;
             else if (modifier == ModifierType.OVERRIDE) {
-                if (override != null) {
-                    ModifierType twoAgo = getModifierFromConfig(new ComboBlock(b.getRelative(train.getOppositeFace(), 2)));
-                    if (twoAgo == ModifierType.OVERRIDE) overrideAbsolute = true;
-                } else override = dispenser.getRelative(train, ++i);
+                if (getOverride() != null) {
+                    ModifierType twoAgo = getModifierFromConfig(new ComboBlock(b.getRelative(getTrain().getOppositeFace(), 2)));
+                    if (twoAgo == ModifierType.OVERRIDE) setOverrideAbsolute(true);
+                } else setOverride(dispenser.getRelative(getTrain(), ++i));
             } else if (modifier == ModifierType.FILTER) {
-                filter = dispenser.getRelative(train, ++i);
+                setFilter(dispenser.getRelative(getTrain(), ++i));
             } else if (modifier == ModifierType.AREA) {
-                areaEnabled = true;
-                lineEnabled = false;
+                setAreaEnabled(true);
+                setLineEnabled(false);
             } else if (modifier == ModifierType.LINE) {
-                lineEnabled = true;
-                areaEnabled = false;
+                setLineEnabled(true);
+                setAreaEnabled(false);
             } else if (modifier == ModifierType.TIMER) {
-                timerEnabled = true;
+                setTimerEnabled(true);
             } else if (modifier == ModifierType.FINITE) {
-                finite = true;
+                setFinite(true);
             } else {
                 modifier.callModify(this);
             }
         }
-        if (initial && timerEnabled) {
+        if (initial && isTimerEnabled()) {
             final Processor owner = this;
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(gadget, new Runnable() {
+            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
                 public void run() {
-                    owner.process(dispenser, block, finite);
+                    owner.process(dispenser, block, isFinite());
                 }
-            }, delay);
+            }, getDelay());
         }
-        return mode.callModeModify(this);
+        return getMode().callModeModify(this);
     }
 
     public ModifierType getModifierFromConfig(ComboBlock block) {
         for (Entry<ModifierType, ComboBlock> type : config.entrySet()) {
-            if (type.getValue().id == block.id) {
-                if (block.id == Material.WOOL.getId()) {
-                    if (type.getValue().data == block.data) return type.getKey();
+            if (type.getValue().getID() == block.getID()) {
+                if (block.getID() == Material.WOOL.getId()) {
+                    if (type.getValue().getData() == block.getData()) return type.getKey();
                 } else return type.getKey();
             }
         }
@@ -103,9 +102,9 @@ public class Processor {
     }
 
     public void addOffset(int add) {
-        if (timerEnabled) delay += add * 2;
-        else if (areaEnabled || lineEnabled) addSize(add);
-        else offset += add;
+        if (isTimerEnabled()) setDelay(getDelay() + add * 2);
+        else if (isAreaEnabled() || isLineEnabled()) addSize(add);
+        else setOffset(getOffset() + add);
     }
 
     public void setOffset(int newOffset) {
@@ -117,13 +116,198 @@ public class Processor {
     }
 
     public void addSize(int add) {
-        size += add;
-        if (size > 100) size = 100;
-        else if (size < -1) size = -1;
+        setSize(getSize() + add);
+        if (getSize() > 100) setSize(100);
+        else if (getSize() < -1) setSize(-1);
     }
 
     public int getSize() {
         return size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * @return the gadget
+     */
+    public VoxelGadget getGadget() {
+        return gadget;
+    }
+
+    /**
+     * @return the delay
+     */
+    public int getDelay() {
+        return delay;
+    }
+
+    /**
+     * @param delay the delay to set
+     */
+    public void setDelay(int delay) {
+        this.delay = delay;
+    }
+
+    /**
+     * @return the areaEnabled
+     */
+    public boolean isAreaEnabled() {
+        return areaEnabled;
+    }
+
+    /**
+     * @param areaEnabled the areaEnabled to set
+     */
+    public void setAreaEnabled(boolean areaEnabled) {
+        this.areaEnabled = areaEnabled;
+    }
+
+    /**
+     * @return the lineEnabled
+     */
+    public boolean isLineEnabled() {
+        return lineEnabled;
+    }
+
+    /**
+     * @param lineEnabled the lineEnabled to set
+     */
+    public void setLineEnabled(boolean lineEnabled) {
+        this.lineEnabled = lineEnabled;
+    }
+
+    /**
+     * @return the timerEnabled
+     */
+    public boolean isTimerEnabled() {
+        return timerEnabled;
+    }
+
+    /**
+     * @param timerEnabled the timerEnabled to set
+     */
+    public void setTimerEnabled(boolean timerEnabled) {
+        this.timerEnabled = timerEnabled;
+    }
+
+    /**
+     * @return the finite
+     */
+    public boolean isFinite() {
+        return finite;
+    }
+
+    /**
+     * @param finite the finite to set
+     */
+    public void setFinite(boolean finite) {
+        this.finite = finite;
+    }
+
+    /**
+     * @return the block
+     */
+    public ItemStack getBlock() {
+        return block;
+    }
+
+    /**
+     * @param block the block to set
+     */
+    public void setBlock(ItemStack block) {
+        this.block = block;
+    }
+
+    /**
+     * @return the override
+     */
+    public Block getOverride() {
+        return override;
+    }
+
+    /**
+     * @param override the override to set
+     */
+    public void setOverride(Block override) {
+        this.override = override;
+    }
+
+    /**
+     * @return the overrideAbsolute
+     */
+    public boolean isOverrideAbsolute() {
+        return overrideAbsolute;
+    }
+
+    /**
+     * @param overrideAbsolute the overrideAbsolute to set
+     */
+    public void setOverrideAbsolute(boolean overrideAbsolute) {
+        this.overrideAbsolute = overrideAbsolute;
+    }
+
+    /**
+     * @return the filter
+     */
+    public Block getFilter() {
+        return filter;
+    }
+
+    /**
+     * @param filter the filter to set
+     */
+    public void setFilter(Block filter) {
+        this.filter = filter;
+    }
+
+    /**
+     * @return the dispenser
+     */
+    public Block getDispenser() {
+        return dispenser;
+    }
+
+    /**
+     * @return the current Mode of the gadget.
+     */
+    public ModifierType getMode() {
+        return mode;
+    }
+
+    /**
+     * 
+     * @param mode 
+     * @throws IllegalArgumentException if mode is not a Mode Modifier
+     */
+    public void setMode(ModifierType mode) {
+        if (mode.getType() != ModifierType.Type.MODE) throw new IllegalArgumentException("Modifier must be a Mode Modifier");
+        this.mode = mode;
+    }
+
+    /**
+     * @return the BlockFace/Direction of the dispenser's train
+     */
+    public BlockFace getTrain() {
+        return train;
+    }
+
+    /**
+     * @return the applyPhysics
+     */
+    public boolean applyPhysics() {
+        return applyPhysics;
+    }
+
+    /**
+     * @param applyPhysics the applyPhysics to set
+     */
+    public void setApplyPhysics(boolean applyPhysics) {
+        this.applyPhysics = applyPhysics;
     }
 
 }

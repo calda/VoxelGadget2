@@ -5,15 +5,12 @@ import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.io.File;
 import java.util.HashMap;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 
 public class GadgetListener implements Listener {
 
-    final static String gadgetText = ChatColor.DARK_GRAY + "[" + ChatColor.LIGHT_PURPLE + "Voxel"
-            + ChatColor.DARK_PURPLE + "Gadget" + ChatColor.DARK_GRAY + "] " + ChatColor.GRAY;
     final VoxelGadget gadget;
     final HashMap<ModifierType, ComboBlock> config = new HashMap<ModifierType, ComboBlock>();
     private boolean infiniteBlocks = true;

@@ -1,5 +1,6 @@
 package com.thevoxelbox.voxelgadget.command;
 
+import com.thevoxelbox.voxelgadget.Processor;
 import static com.thevoxelbox.voxelgadget.command.GadgetCommand.VOXEL_GADGET;
 import com.thevoxelbox.voxelgadget.modifier.BlueprintModifier;
 import java.util.ArrayList;
@@ -52,27 +53,15 @@ public class SaveCommand implements CommandExecutor {
 					+ dimX + "x" + dimY + "x" + dimZ + ").");
 			return true;
 		}
-		BlueprintModifier.Focus focus = BlueprintModifier.Focus.CENTER;
 		BlueprintModifier.OverrideMode mode = BlueprintModifier.OverrideMode.ALL;
 		String name = args[1];
 		for (String arg : args) {
-			for (BlueprintModifier.Focus f : BlueprintModifier.Focus.values()) {
-				if (f.toString().equalsIgnoreCase(arg)) {
-					focus = f;
-					break;
-				}
-			}
 			for (BlueprintModifier.OverrideMode m : BlueprintModifier.OverrideMode.values()) {
 				if (m.toString().equalsIgnoreCase(arg)) {
 					mode = m;
 					break;
 				}
 			}
-		}
-		if (dimX % 2 == 0 || dimY % 2 == 0 || dimZ % 2 == 0) {
-			p.sendMessage(VOXEL_GADGET + "All dimensions must be odd to focus on center.");
-			p.sendMessage(VOXEL_GADGET + "Current dimensions are (" + dimX + "x" + dimY + "x" + dimZ + ".");
-			return true;
 		}
 
 		ItemStack stack = new ItemStack(Material.WRITTEN_BOOK, 1);
@@ -85,7 +74,6 @@ public class SaveCommand implements CommandExecutor {
 		book.add("BLUEPRINT " + name);
 		book.add("*created by " + p.getName());
 		book.add("DIM " + dimX + "x" + dimY + "x" + dimZ);
-		book.add("PASTE " + focus.toString());
 		book.add("REPLACE " + mode.toString());
 
 		Location northWest;
@@ -106,7 +94,6 @@ public class SaveCommand implements CommandExecutor {
 				StringBuilder line = new StringBuilder();
 				for (int x = 0; x < dimX; x++) {
 					Block b = locs[1].getWorld().getBlockAt(northWest.getBlockX() + x, northWest.getBlockY() + y, northWest.getBlockZ() + z);
-					System.out.println(x + "," + y + "," + z + "   " + b.toString());
 					line.append(b.getTypeId());
 					byte data = b.getData();
 					if (data != (byte) 0) line.append(":").append(data);
@@ -125,7 +112,7 @@ public class SaveCommand implements CommandExecutor {
 		stack.setItemMeta(meta);
 		p.getInventory().addItem(stack);
 		p.sendMessage(VOXEL_GADGET + "Created " + name + " blueprint with dimentions of "
-				+ dimX + "x" + dimY + "x" + dimZ + " and settings: " + mode.toString() + " and " + focus.toString() + ".");
+				+ dimX + "x" + dimY + "x" + dimZ + " and override mode " + mode);
 		return true;
 	}
 

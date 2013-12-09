@@ -10,6 +10,12 @@ public class BlockToggleMode extends AbstractModeModifier {
 
     @Override
     public boolean modify(Processor p) {
+		if (p.getBlock().getTypeId() == 387) {
+			BlueprintModifier blueprint = new BlueprintModifier();
+			if(blueprint.checkIfExists(p)) blueprint.remove(p);
+			else blueprint.paste(p);
+			return true;
+		}
         Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), (p.isLineEnabled() 
 				|| p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
 		if(p.getOffset3D() != null) existing = p.getOffset3D().getBlock();

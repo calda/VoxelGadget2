@@ -32,7 +32,7 @@ public class GadgetListener implements Listener {
 	 */
 	@EventHandler
 	public void onDispenserDispense(BlockDispenseEvent e) {
-		if (e.getItem().getType().isBlock()) {
+		if (e.getItem().getType().isBlock() || e.getItem().getTypeId() == 387) {
 			Processor processor = new Processor(config, infiniteBlocks, gadget);
 			boolean success = processor.process(e.getBlock(), e.getItem(), true);
 			e.setCancelled(success);

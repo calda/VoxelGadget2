@@ -1,7 +1,6 @@
 package com.thevoxelbox.voxelgadget;
 
 import static com.thevoxelbox.voxelgadget.VoxelGadget.log;
-import com.thevoxelbox.voxelgadget.command.GadgetCommand;
 import static com.thevoxelbox.voxelgadget.command.GadgetCommand.VOXEL_GADGET;
 import com.thevoxelbox.voxelgadget.command.SaveCommand;
 import com.thevoxelbox.voxelgadget.modifier.ComboBlock;

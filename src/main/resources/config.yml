@@ -1,6 +1,6 @@
 #Keeps track of what version your config is in case a new
 #modifier is released and needs to be added to your config.
-CONFIG_VERSION: 3
+CONFIG_VERSION: 2
 AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE: true
 
 #Remove or comment out line to remove a modifier from Gadget
@@ -16,6 +16,7 @@ REMOVE: "57"
 NO_PHYSICS: "35:8"
 OVERRIDE: "35:14"
 INVENTORY: "35:12"
+THREE_DIM: "35:13"
 TIMER: "159:15"
 LINE: "35:2"
 AREA: "35:1"

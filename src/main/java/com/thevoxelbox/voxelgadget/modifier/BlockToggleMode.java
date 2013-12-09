@@ -10,7 +10,9 @@ public class BlockToggleMode extends AbstractModeModifier {
 
     @Override
     public boolean modify(Processor p) {
-        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), (p.isLineEnabled() || p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
+        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), (p.isLineEnabled() 
+				|| p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
+		if(p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
         if (p.isOverrideAbsolute()) {
             if (existing.getTypeId() == p.getOverride().getTypeId() && existing.getData() == p.getOverride().getData()) {
                 setBlock(existing, 0, (byte) 0, p.applyPhysics(), p);

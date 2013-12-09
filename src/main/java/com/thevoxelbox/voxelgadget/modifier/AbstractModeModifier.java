@@ -20,6 +20,7 @@ public abstract class AbstractModeModifier extends AbstractModifier {
      */
     public boolean modeModify(Processor p) {
         Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+		if(p.getOffset3D() != null) existing = p.getDispenser().getLocation().add(p.getOffset3D()).getBlock();
         if (p.getFilter() == null) return modify(p);
         else if (existing.getTypeId() == p.getFilter().getTypeId() && existing.getData() == p.getFilter().getData()) return modify(p);
         else return true;

@@ -9,6 +9,6 @@ public abstract class AbstractModifier {
      * @param p the Processor to modify
      * @return true if successful
      */
-    public abstract boolean modify(Processor p);
+    public abstract int modify(Processor p);
 
 }

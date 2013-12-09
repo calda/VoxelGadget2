@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 class InventoryModifier extends AbstractModifier {
 
     @Override
-    public boolean modify(Processor p) {
+    public int modify(Processor p) {
         ArrayList<ItemStack> similars = new ArrayList<ItemStack>();
         Block dispenser = p.getDispenser();
         Dispenser disp = (Dispenser) dispenser.getState();
@@ -24,7 +24,7 @@ class InventoryModifier extends AbstractModifier {
         Random r = new Random();
         System.out.println(similars);
         p.setOffset(similars.get(r.nextInt(similars.size())).getAmount() + 1);
-        return true;
+        return 0;
     }
 
 }

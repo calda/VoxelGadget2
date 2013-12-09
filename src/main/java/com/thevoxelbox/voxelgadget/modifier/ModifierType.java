@@ -9,14 +9,14 @@ public enum ModifierType {
 	TOGGLE(new BlockToggleMode(), Type.MODE, new ComboBlock(Material.LAPIS_BLOCK)),
 	REMOVE(new BlockRemoveMode(), Type.MODE, new ComboBlock(Material.DIAMOND_BLOCK)),
 	NO_PHYSICS(new NoPhysicsModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 8)),
-	OVERRIDE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 14)),
+	OVERRIDE(new OverrideModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 14)),
 	INVENTORY(new InventoryModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 12)),
-	THREE_DIM(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 13)),
-	TIMER(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 7)),
-	LINE(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 2)),
-	AREA(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 1)),
-	FILTER(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 4)),
-	SKIP(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 0)),
+	THREE_DIM(new ThreeDimModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 13)),
+	TIMER(new TimerModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 7)),
+	LINE(new LineModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 2)),
+	AREA(new AreaModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 1)),
+	FILTER(new FilterModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 4)),
+	SKIP(new SkipModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 0)),
 	DUMMY(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 6)),
 	ADD1(new OffsetModifier(1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 9)),
 	ADD5(new OffsetModifier(5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 11)),
@@ -46,9 +46,9 @@ public enum ModifierType {
 	 * @param p the Processor that called the method
 	 * @return true if the modifications were successful
 	 */
-	public boolean callModify(Processor p) {
+	public int callModify(Processor p) {
 		if (modifier != null) return modifier.modify(p);
-		return true;
+		return 0;
 	}
 
 	/**
@@ -57,9 +57,9 @@ public enum ModifierType {
 	 * @param p the Processor that called the method
 	 * @return false if the Modifier is not a Mode Modifier
 	 */
-	public boolean callModeModify(Processor p) {
+	public int callModeModify(Processor p) {
 		if (modifier instanceof AbstractModeModifier) return ((AbstractModeModifier) modifier).modeModify(p);
-		else return false;
+		else return 0;
 	}
 
 	/**

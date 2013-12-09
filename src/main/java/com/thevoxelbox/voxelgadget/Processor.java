@@ -9,8 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class Processor {
@@ -34,13 +32,14 @@ public class Processor {
 	private ModifierType mode;
 	private BlockFace train = null;
 	private boolean applyPhysics = true;
+	private int current = 0;
 
 	public Processor(HashMap<ModifierType, ComboBlock> config, boolean infinite, VoxelGadget gadget) {
 		this.config = config;
 		this.gadget = gadget;
 	}
 
-	public boolean process(final Block dispenser, final ItemStack block, final boolean initial) {
+	public int process(final Block dispenser, final ItemStack block, final boolean initial) {
 		this.dispenser = dispenser;
 		this.setBlock(block);
 		for (BlockFace face : faces) {
@@ -53,44 +52,15 @@ public class Processor {
 				break;
 			}
 		}
-		if (getTrain() == null) return false;
+		if (getTrain() == null) return 0;
 		if (!initial) return getMode().callModeModify(this);
-		for (int i = 2; i < 64; i++) {
-			Block b = dispenser.getRelative(getTrain(), i);
+		for (current = 2; current < 64; current++) {
+			Block b = dispenser.getRelative(getTrain(), current);
 			ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
 			if (modifier == null) break;
-			if (modifier == ModifierType.SKIP) i++;
-			else if (modifier == ModifierType.OVERRIDE) {
-				if (getOverride() != null) {
-					ModifierType twoAgo = getModifierFromConfig(new ComboBlock(b.getRelative(getTrain().getOppositeFace(), 2)));
-					if (twoAgo == ModifierType.OVERRIDE) setOverrideAbsolute(true);
-				} else setOverride(dispenser.getRelative(getTrain(), ++i));
-			} else if (modifier == ModifierType.FILTER) {
-				setFilter(dispenser.getRelative(getTrain(), ++i));
-			} else if (modifier == ModifierType.THREE_DIM) {
-				Block behind = dispenser.getRelative(getTrain(), ++i);
-				if (behind.getState() instanceof InventoryHolder) {
-					Inventory iBehind = ((InventoryHolder)behind.getState()).getInventory();
-					try {
-						int offx = (iBehind.getItem(0) == null ? 0 : iBehind.getItem(0).getAmount() - 32);
-						int offy = (iBehind.getItem(1) == null ? 0 : iBehind.getItem(1).getAmount() - 32);
-						int offz = (iBehind.getItem(1) == null ? 0 : iBehind.getItem(2).getAmount() - 32);
-						Location offsetTemp = new Location(getDispenser().getWorld(), offx, offy, offz);
-						setOffset3D(getDispenser().getLocation().add(offsetTemp));
-					} catch (NullPointerException e) { 
-						i -= 1;
-					}
-				}
-			} else if (modifier == ModifierType.AREA) {
-				setAreaEnabled(true);
-				setLineEnabled(false);
-			} else if (modifier == ModifierType.LINE) {
-				setLineEnabled(true);
-				setAreaEnabled(false);
-			} else if (modifier == ModifierType.TIMER) {
-				setTimerEnabled(true);
-			} else {
-				modifier.callModify(this);
+			else {
+				int skip = modifier.callModify(this);
+				current += skip;
 			}
 		}
 		if (initial && isTimerEnabled()) {
@@ -322,6 +292,13 @@ public class Processor {
 	 */
 	public void setOffset3D(Location offset3D) {
 		this.offset3D = offset3D;
+	}
+
+	/**
+	 * @return the current offset from the dispenser
+	 */
+	public int getCurrent() {
+		return current;
 	}
 
 }

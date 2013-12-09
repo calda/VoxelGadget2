@@ -14,11 +14,11 @@ public class OffsetModifier extends AbstractModifier {
     }
 
     @Override
-    public boolean modify(Processor p) {
+    public int modify(Processor p) {
         p.addOffset(offset);
         if (p.getOffset() > 100) p.setOffset(100);
         else if (p.getOffset() < 1) p.setOffset(1);
-        return true;
+        return 0;
     }
 
 }

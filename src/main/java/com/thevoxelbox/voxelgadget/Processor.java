@@ -88,7 +88,6 @@ public class Processor {
 		}
 		if (checkEnabled) {
 			final Block last = dispenser.getRelative(train, getCurrent());
-			System.out.println(check);
 			last.setType((check ? Material.REDSTONE_BLOCK : Material.GLASS));
 			last.setData((byte) 0);
 			if (getMode() == ModifierType.TOGGLE) {

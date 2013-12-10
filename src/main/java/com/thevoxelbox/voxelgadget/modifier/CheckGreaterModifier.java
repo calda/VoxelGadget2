@@ -25,7 +25,7 @@ public class CheckGreaterModifier extends AbstractCheckModifier {
 	private boolean inventoryHasProperStack(Inventory other, ItemStack check) {
 		for (ItemStack i : other.getContents()) {
 			if (i != null && check.getTypeId() == i.getTypeId() && check.getData().getData() == i.getData().getData()) {
-				System.out.println(i.getAmount() + " < " + check.getAmount());
+				//System.out.println(i.getAmount() + " < " + check.getAmount());
 				return i.getAmount() < check.getAmount();
 			}
 		}

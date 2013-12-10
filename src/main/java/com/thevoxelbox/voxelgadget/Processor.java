@@ -44,6 +44,10 @@ public class Processor {
 	private final ArrayList<ModifierType> checkLater = new ArrayList<ModifierType>();
 
 	public boolean process(final Block dispenser, final ItemStack block, final boolean initial) {
+		if (!initial && !isCheckEnabled()) {
+			getMode().callModeModify(this);
+			return true;
+		}
 		this.dispenser = dispenser;
 		this.setBlock(block);
 		for (BlockFace face : faces) {
@@ -57,10 +61,6 @@ public class Processor {
 			}
 		}
 		if (getTrain() == null) return false;
-		if (!initial && !isCheckEnabled()) {
-			getMode().callModeModify(this);
-			return true;
-		}
 		for (current = 2; current < 64; current++) {
 			Block b = dispenser.getRelative(getTrain(), current);
 			ModifierType modifier = getModifierFromConfig(new ComboBlock(b));

@@ -23,11 +23,15 @@ public enum ModifierType {
 	ADD10(new OffsetModifier(10), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 10)),
 	ADD25(new OffsetModifier(25), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 3)),
 	SUBTRACT1(new OffsetModifier(-1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 5)),
-	SUBTRACT5(new OffsetModifier(-5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 15));
+	SUBTRACT5(new OffsetModifier(-5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 15)),
+	SET_INVENTORY(new SetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(159, (byte) 13)),
+	CHECK_LESS(new CheckLessModifier(), Type.CHECK, new ComboBlock(159, (byte) 2)),
+	CHECK_GREATER(new CheckGreaterModifier(), Type.CHECK, new ComboBlock(159, (byte) 15)),
+	CHECK_EQUALS(new CheckEqualsModifier(), Type.CHECK, new ComboBlock(159, (byte) 7));
 
 	public enum Type {
 
-		MODE, OFFSET, SPECIAL, FUN;
+		MODE, MODE_OVERRIDE, OFFSET, SPECIAL, CHECK;
 	}
 
 	private final AbstractModifier modifier;

@@ -2,6 +2,7 @@ package com.thevoxelbox.voxelgadget;
 
 import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import org.bukkit.Bukkit;
@@ -33,13 +34,17 @@ public class Processor {
 	private BlockFace train = null;
 	private boolean applyPhysics = true;
 	private int current = 0;
+	private boolean check = false;
+	private boolean checkEnabled = false;
 
-	public Processor(HashMap<ModifierType, ComboBlock> config, boolean infinite, VoxelGadget gadget) {
+	public Processor(HashMap<ModifierType, ComboBlock> config, VoxelGadget gadget) {
 		this.config = config;
 		this.gadget = gadget;
 	}
 
-	public int process(final Block dispenser, final ItemStack block, final boolean initial) {
+	private final ArrayList<ModifierType> checkLater = new ArrayList<ModifierType>();
+
+	public boolean process(final Block dispenser, final ItemStack block, final boolean initial) {
 		this.dispenser = dispenser;
 		this.setBlock(block);
 		for (BlockFace face : faces) {
@@ -52,26 +57,53 @@ public class Processor {
 				break;
 			}
 		}
-		if (getTrain() == null) return 0;
-		if (!initial) return getMode().callModeModify(this);
+		if (getTrain() == null) return false;
+		if (!initial && !isCheckEnabled()) {
+			getMode().callModeModify(this);
+			return true;
+		}
 		for (current = 2; current < 64; current++) {
 			Block b = dispenser.getRelative(getTrain(), current);
 			ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
 			if (modifier == null) break;
-			else {
+			else if (modifier.getType() == ModifierType.Type.CHECK) {
+				checkLater.add(modifier);
+			} else {
 				int skip = modifier.callModify(this);
 				current += skip;
 			}
+		}
+		for (ModifierType modifier : checkLater) {
+			modifier.callModify(this);
 		}
 		if (initial && isTimerEnabled()) {
 			final Processor owner = this;
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
 				public void run() {
-					owner.process(dispenser, block, false);
+					if (!owner.isCheckEnabled()) owner.process(dispenser, block, false);
+					else {
+						(new Processor(config, gadget)).process(dispenser, block, false);
+					}
 				}
 			}, getDelay());
 		}
-		return getMode().callModeModify(this);
+		if (checkEnabled) {
+			final Block last = dispenser.getRelative(train, getCurrent());
+			System.out.println(check);
+			last.setType((check ? Material.REDSTONE_BLOCK : Material.GLASS));
+			last.setData((byte) 0);
+			if (getMode() == ModifierType.TOGGLE) {
+				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
+					public void run() {
+						last.setType(Material.GLASS);
+					}
+				}, 2);
+			}
+			return true;
+		} else {
+			getMode().callModeModify(this);
+			return true;
+		}
 	}
 
 	public ModifierType getModifierFromConfig(ComboBlock block) {
@@ -255,8 +287,9 @@ public class Processor {
 	 * @throws IllegalArgumentException if mode is not a Mode Modifier
 	 */
 	public void setMode(ModifierType mode) {
-		if (mode.getType() != ModifierType.Type.MODE) throw new IllegalArgumentException("Modifier must be a Mode Modifier");
-		this.mode = mode;
+		if (mode.getType() == ModifierType.Type.MODE || mode.getType() == ModifierType.Type.MODE_OVERRIDE) {
+			this.mode = mode;
+		} else throw new IllegalArgumentException("Modifier must be a Mode Modifier");
 	}
 
 	/**
@@ -299,6 +332,28 @@ public class Processor {
 	 */
 	public int getCurrent() {
 		return current;
+	}
+
+	/**
+	 * @return the check
+	 */
+	public boolean getCheck() {
+		return check;
+	}
+
+	/**
+	 * @param check the check to set
+	 */
+	public void setCheck(boolean check) {
+		this.check = check;
+		if (checkEnabled == false) checkEnabled = true;
+	}
+
+	/**
+	 * @return the checkEnabled
+	 */
+	public boolean isCheckEnabled() {
+		return checkEnabled;
 	}
 
 }

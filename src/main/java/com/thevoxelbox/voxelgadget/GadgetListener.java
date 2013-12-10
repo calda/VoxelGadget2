@@ -19,7 +19,6 @@ public class GadgetListener implements Listener {
 
 	final VoxelGadget gadget;
 	final HashMap<ModifierType, ComboBlock> config = new HashMap<ModifierType, ComboBlock>();
-	private boolean infiniteBlocks = true;
 
 	public GadgetListener(VoxelGadget gadget) {
 		this.gadget = gadget;
@@ -33,9 +32,8 @@ public class GadgetListener implements Listener {
 	@EventHandler
 	public void onDispenserDispense(BlockDispenseEvent e) {
 		if (e.getItem().getType().isBlock() || e.getItem().getTypeId() == 387) {
-			Processor processor = new Processor(config, infiniteBlocks, gadget);
-			processor.process(e.getBlock(), e.getItem(), true);
-			e.setCancelled(true);
+			Processor processor = new Processor(config, gadget);
+			e.setCancelled(processor.process(e.getBlock(), e.getItem(), true));
 		}
 	}
 
@@ -57,7 +55,7 @@ public class GadgetListener implements Listener {
 	 * If there is no config file, it is auto-generated.
 	 */
 	public void loadConfig() {
-		File f = new File("plugins/VoxelGadget/config.yml");
+		File f = new File("plugins/VoxelGadget2/config.yml");
 		if (f.exists()) {
 			for (ModifierType type : ModifierType.values()) {
 				String value = gadget.getConfig().getString(type.toString());
@@ -79,9 +77,6 @@ public class GadgetListener implements Listener {
 					log.warning("[VoxelGadget] There was an issue loading the configuration for the " + type + " modifier.");
 					log.warning("[VoxelGadget] It has not been loaded into active modifier status.");
 				}
-			}
-			if (gadget.getConfig().contains("INFINITE_BLOCKS")) {
-				infiniteBlocks = gadget.getConfig().getBoolean("INFINITE_BLOCKS");
 			}
 			log.info("[VoxelGadget] Config loaded");
 		} else {

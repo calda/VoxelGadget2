@@ -1,6 +1,5 @@
 package com.thevoxelbox.voxelgadget.command;
 
-import com.thevoxelbox.voxelgadget.Processor;
 import static com.thevoxelbox.voxelgadget.command.GadgetCommand.VOXEL_GADGET;
 import com.thevoxelbox.voxelgadget.modifier.BlueprintModifier;
 import java.util.ArrayList;
@@ -17,17 +16,17 @@ import org.bukkit.inventory.meta.BookMeta;
 
 public class SaveCommand implements CommandExecutor {
 
-	private final static HashMap<String, Location[]> points = new HashMap<String, Location[]>();
+	protected final static HashMap<String, Location[]> POINTS = new HashMap<String, Location[]>();
 
 	public static void addPoint(String name, int index, Location point) {
-		if (!points.containsKey(name)) {
+		if (!POINTS.containsKey(name)) {
 			Location[] locs = new Location[2];
 			locs[index] = point;
-			points.put(name, locs);
+			POINTS.put(name, locs);
 		} else {
-			Location[] locs = points.get(name);
+			Location[] locs = POINTS.get(name);
 			locs[index] = point;
-			points.put(name, locs);
+			POINTS.put(name, locs);
 		}
 	}
 
@@ -37,7 +36,7 @@ public class SaveCommand implements CommandExecutor {
 			p.sendMessage(VOXEL_GADGET + "/gadget save blueprintName (focus) (mode)");
 			return true;
 		}
-		Location[] locs = points.get(p.getName());
+		Location[] locs = POINTS.get(p.getName());
 		if (locs == null || locs[0] == null || locs[1] == null) {
 			p.sendMessage(VOXEL_GADGET + "You have not set a cuboid yet.");
 			p.sendMessage(VOXEL_GADGET + "Set a cuboid using a book (id 340).");

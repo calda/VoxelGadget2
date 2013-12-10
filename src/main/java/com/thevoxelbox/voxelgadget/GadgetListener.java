@@ -46,6 +46,7 @@ public class GadgetListener implements Listener {
 			Player p = e.getPlayer();
 			SaveCommand.addPoint(p.getName(), index, e.getClickedBlock().getLocation());
 			p.sendMessage(VOXEL_GADGET + "Set point " + (index + 1));
+			e.setCancelled(true);
 		}
 	}
 

@@ -25,6 +25,7 @@ public enum ModifierType {
 	SUBTRACT1(new OffsetModifier(-1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 5)),
 	SUBTRACT5(new OffsetModifier(-5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 15)),
 	SET_INVENTORY(new SetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 13)),
+	GET_INVENTORY(new GetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 3)),
 	CHECK_PLAYER(new CheckPlayerModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 10)),
 	CHECK_LESS(new CheckLessModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 2)),
 	CHECK_GREATER(new CheckGreaterModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 15)),

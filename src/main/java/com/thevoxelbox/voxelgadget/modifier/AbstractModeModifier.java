@@ -43,6 +43,39 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			existing.getWorld().spawnEntity(existing.getLocation(), EntityType.PRIMED_TNT);
 			return;
 		}
+		if (p.isAreaEnabled()) {
+			int radius = p.getOffset() - 1;
+			int offset = p.getSize();
+			if (radius > 5) radius = 5;
+			if (offset == -1) offset = 0;
+			Block center = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), offset + 1);
+			for (int i = 0 - radius; i <= radius; i++) {
+				for (int j = 0 - radius; j <= radius; j++) {
+					Block set = null;
+					if (p.getTrain() == BlockFace.EAST || p.getTrain() == BlockFace.WEST) {
+						set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.SOUTH, j);
+					} else if (p.getTrain() == BlockFace.NORTH || p.getTrain() == BlockFace.SOUTH) {
+						set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.EAST, j);
+					} else if (p.getTrain() == BlockFace.UP || p.getTrain() == BlockFace.DOWN) {
+						set = center.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
+					}
+					if (set != null) {
+						actualSetBlock(d, set, newID, newData, applyPhysics, p);
+					}
+				}
+			}
+		} else if (p.isLineEnabled()) {
+			int length = p.getOffset() - 1;
+			int offset = p.getSize();
+			//System.out.println("l:" + length + " o:" + offset);
+			for (int i = 0; i < length; i++) {
+				Block set = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), i + offset + 2);
+				actualSetBlock(d, set, newID, newData, applyPhysics, p);
+			}
+		} else actualSetBlock(d, existing, newID, newData, applyPhysics, p);
+	}
+
+	private void actualSetBlock(Dispenser d, Block existing, int newID, byte newData, boolean applyPhysics, Processor p) {
 		if (existing.getState() instanceof InventoryHolder) {
 			InventoryHolder invBlock = (InventoryHolder) existing.getState();
 			Inventory i = invBlock.getInventory();
@@ -59,41 +92,9 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 				i.addItem(new ItemStack(newID, amount, newData));
 			}
 		} else {
-			if (p.isAreaEnabled()) {
-				int radius = p.getOffset() - 1;
-				int offset = p.getSize();
-				if (radius > 5) radius = 5;
-				if (offset == -1) offset = 0;
-				Block center = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), offset + 1);
-				for (int i = 0 - radius; i <= radius; i++) {
-					for (int j = 0 - radius; j <= radius; j++) {
-						Block set = null;
-						if (p.getTrain() == BlockFace.EAST || p.getTrain() == BlockFace.WEST) {
-							set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.SOUTH, j);
-						} else if (p.getTrain() == BlockFace.NORTH || p.getTrain() == BlockFace.SOUTH) {
-							set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.EAST, j);
-						} else if (p.getTrain() == BlockFace.UP || p.getTrain() == BlockFace.DOWN) {
-							set = center.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
-						}
-						if (set != null) {
-							set.setTypeId(newID, applyPhysics);
-							set.setData(newData, applyPhysics);
-						}
-					}
-				}
-			} else if (p.isLineEnabled()) {
-				int length = p.getOffset() - 1;
-				int offset = p.getSize();
-				//System.out.println("l:" + length + " o:" + offset);
-				for (int i = 0; i < length; i++) {
-					Block set = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), i + offset + 2);
-					set.setTypeId(newID, applyPhysics);
-					set.setData(newData, applyPhysics);
-				}
-			} else {
-				existing.setTypeId(newID, applyPhysics);
-				existing.setData(newData, applyPhysics);
-			}
+			existing.setTypeId(newID, applyPhysics);
+			existing.setData(newData, applyPhysics);
 		}
 	}
+
 }

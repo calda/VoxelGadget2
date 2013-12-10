@@ -3,8 +3,7 @@ package com.thevoxelbox.voxelgadget;
 import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
+import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class Processor {
 
-	final HashMap<ModifierType, ComboBlock> config;
+	final Map<Integer, ModifierType> config;
 	final BlockFace[] faces = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
 
 	private final VoxelGadget gadget;
@@ -37,7 +36,7 @@ public class Processor {
 	private boolean check = false;
 	private boolean checkEnabled = false;
 
-	public Processor(HashMap<ModifierType, ComboBlock> config, VoxelGadget gadget) {
+	public Processor(Map<Integer, ModifierType> config, VoxelGadget gadget) {
 		this.config = config;
 		this.gadget = gadget;
 	}
@@ -50,9 +49,9 @@ public class Processor {
 		for (BlockFace face : faces) {
 			Block possibleModeBlock = dispenser.getRelative(face);
 			ComboBlock possibleModeCombo = new ComboBlock(possibleModeBlock.getTypeId(), possibleModeBlock.getData());
-			ModifierType mode = getModifierFromConfig(possibleModeCombo);
-			if (mode != null && mode.getType() == ModifierType.Type.MODE) {
-				this.setMode(mode);
+			ModifierType mode_ = getModifierFromConfig(possibleModeCombo);
+			if (mode_ != null && mode_.getType() == ModifierType.Type.MODE) {
+				this.setMode(mode_);
 				this.train = face;
 				break;
 			}
@@ -107,14 +106,7 @@ public class Processor {
 	}
 
 	public ModifierType getModifierFromConfig(ComboBlock block) {
-		for (Entry<ModifierType, ComboBlock> type : config.entrySet()) {
-			if (type.getValue().getID() == block.getID()) {
-				if (block.getID() == Material.WOOL.getId()) {
-					if (type.getValue().getData() == block.getData()) return type.getKey();
-				} else return type.getKey();
-			}
-		}
-		return null;
+		return config.get(((block.getID() << 8) | block.getData()));
 	}
 
 	public void addOffset(int add) {

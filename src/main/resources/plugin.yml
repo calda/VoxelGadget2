@@ -6,4 +6,4 @@ authors: [CalDaBeast]
 description: ${project.description}
 commands:
   gadget:
-    description: the main command for use with VoxelGadget2.
+    description: The main command for use with VoxelGadget2.

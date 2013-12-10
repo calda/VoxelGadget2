@@ -3,10 +3,9 @@ package com.thevoxelbox.voxelgadget;
 import static com.thevoxelbox.voxelgadget.VoxelGadget.log;
 import static com.thevoxelbox.voxelgadget.command.GadgetCommand.VOXEL_GADGET;
 import com.thevoxelbox.voxelgadget.command.SaveCommand;
-import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.io.File;
-import java.util.HashMap;
+import java.util.TreeMap;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class GadgetListener implements Listener {
 
 	final VoxelGadget gadget;
-	final HashMap<ModifierType, ComboBlock> config = new HashMap<ModifierType, ComboBlock>();
+	final TreeMap<Integer, ModifierType> config = new TreeMap<Integer, ModifierType>();
 
 	public GadgetListener(VoxelGadget gadget) {
 		this.gadget = gadget;
@@ -71,8 +70,7 @@ public class GadgetListener implements Listener {
 				try {
 					id = Integer.parseInt(split[0]);
 					data = Integer.parseInt(split[1]);
-					ComboBlock combo = new ComboBlock(id, (byte) data);
-					config.put(type, combo);
+					config.put(((id << 8) | data), type);
 				} catch (NumberFormatException e) {
 					log.warning("[VoxelGadget] There was an issue loading the configuration for the " + type + " modifier.");
 					log.warning("[VoxelGadget] It has not been loaded into active modifier status.");
@@ -81,7 +79,7 @@ public class GadgetListener implements Listener {
 			log.info("[VoxelGadget] Config loaded");
 		} else {
 			for (ModifierType type : ModifierType.values()) {
-				config.put(type, type.getDefaultBlock());
+				config.put(((type.getDefaultBlock().getID() << 8) | type.getDefaultBlock().getData()), type);
 			}
 			gadget.saveDefaultConfig();
 			log.info("[VoxelGadget] Default config created");

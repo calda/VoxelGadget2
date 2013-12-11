@@ -5,7 +5,6 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -51,7 +50,7 @@ class CheckPlayerModifier extends AbstractCheckModifier {
     }
 
     @Override
-    public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock) {
+    public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock, boolean invOverride) {
         return false;
     }
 }

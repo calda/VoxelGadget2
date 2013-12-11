@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 public class CheckBlockExistsModifier extends AbstractCheckModifier {
 
 	@Override
-	public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock) {
+	public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock, boolean invOverride) {
 		return targetBlock != null && targetBlock.getTypeId() != 0;
 	}
 

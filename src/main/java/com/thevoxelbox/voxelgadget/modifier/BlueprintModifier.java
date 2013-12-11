@@ -156,32 +156,31 @@ public class BlueprintModifier {
 	}
 
 	public void setBlock(ComboBlock block, int x, int y, int z, OverrideMode mode, Processor p) {
-		Location start = p.getOffset3D();
-		if (start == null) start = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
-		//System.out.print
-		start.add(x, y, z);
+		Location offset = p.getOffset3D();
+		if (offset == null) offset = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		Location start = new Location(offset.getWorld(), offset.getBlockX() + x, offset.getBlockY() + y, offset.getBlockZ() + z);
 		Block change = start.getWorld().getBlockAt(start);
 		if (block.getID() == 0 && mode != OverrideMode.ALL) return;
 		if (block.getID() != 0 && change.getTypeId() != 0 && mode == OverrideMode.NONE) return;
-		change.setTypeId(block.getID());
-		change.setData(block.getData());
+		change.setTypeId(block.getID(), p.applyPhysics());
+		change.setData(block.getData(), p.applyPhysics());
 	}
 
 	public void removeBlock(int x, int y, int z, Processor p, boolean fall) {
-		Location start = p.getOffset3D();
-		if (start == null) start = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
-		start.add(x, y, z);
+		Location offset = p.getOffset3D();
+		if (offset == null) offset = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		Location start = new Location(offset.getWorld(), offset.getBlockX() + x, offset.getBlockY() + y, offset.getBlockZ() + z);
 		Block change = start.getWorld().getBlockAt(start);
 		if (FALLOFF_MATERIALS.contains(Material.getMaterial(change.getTypeId())) == fall) {
-			change.setTypeId(0);
-			change.setData((byte) 0);
+			change.setTypeId(0, p.applyPhysics());
+			change.setData((byte) 0, p.applyPhysics());
 		}
 	}
 
 	public boolean blockExists(ComboBlock block, int x, int y, int z, Processor p) {
-		Location start = p.getOffset3D();
-		if (start == null) start = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
-		start.add(x, y, z);
+		Location offset = p.getOffset3D();
+		if (offset == null) offset = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		Location start = new Location(offset.getWorld(), offset.getBlockX() + x, offset.getBlockY() + y, offset.getBlockZ() + z);
 		Block check = start.getWorld().getBlockAt(start);
 		return check.getTypeId() == block.getID() && check.getData() == block.getData();
 	}

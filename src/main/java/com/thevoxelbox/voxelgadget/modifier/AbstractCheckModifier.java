@@ -11,8 +11,11 @@ public abstract class AbstractCheckModifier extends AbstractModifier {
 
 	@Override
 	public int modify(Processor p) {
+		int offset = 0;
 		Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
-		if (p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
+		if (p.getOffset3D() != null) {
+			existing = p.getOffset3D().getBlock();
+		}
 		if (!(existing.getState() instanceof InventoryHolder)) {
 			try {
 				p.setCheck(runCheck(null, null, p.getBlock(), existing) || p.getCheck());
@@ -21,11 +24,18 @@ public abstract class AbstractCheckModifier extends AbstractModifier {
 			}
 		}
 		Inventory target = ((InventoryHolder) existing.getState()).getInventory();
-		Inventory dispenser = ((Dispenser) p.getDispenser().getState()).getInventory();
+		Block behind = p.getDispenser().getRelative(p.getTrain(), p.getCurrent() + 1);
+		Inventory dispenser;
+		if (behind.getState() instanceof InventoryHolder) {
+			dispenser = ((InventoryHolder) behind.getState()).getInventory();
+			offset = 1;
+		} else {
+			dispenser = ((Dispenser) p.getDispenser().getState()).getInventory();
+		}
 		p.setCheck(runCheck(target, dispenser, p.getBlock(), existing) || p.getCheck());
-		return 0;
+		return offset;
 	}
 
 	public abstract boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock);
-
+	
 }

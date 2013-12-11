@@ -29,7 +29,9 @@ public enum ModifierType {
 	CHECK_PLAYER(new CheckPlayerModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 10)),
 	CHECK_LESS(new CheckLessModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 2)),
 	CHECK_GREATER(new CheckGreaterModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 15)),
-	CHECK_EQUALS(new CheckEqualsModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 7));
+	CHECK_EQUALS(new CheckEqualsModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 7)),
+	CHECK_BLOCK_EQUALS(new CheckBlockEqualsModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 12)),
+	CHECK_BLOCK_EXISTS(new CheckBlockExistsModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 9));
 
 	public enum Type {
 

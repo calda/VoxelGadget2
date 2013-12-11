@@ -1,23 +1,24 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
+import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class CheckGreaterModifier extends AbstractCheckModifier {
 
 	@Override
-	public boolean runCheck(Inventory target, Inventory dispenser, ItemStack block) {
+	public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock) {
 		boolean match = true;
 		for (ItemStack i : dispenser.getContents()) {
 			if (i != null && i.getTypeId() != 0) {
-				if (i.getTypeId() == block.getTypeId() && i.getData().getData() == block.getData().getData()) {
+				if (i.getTypeId() == dispensed.getTypeId() && i.getData().getData() == dispensed.getData().getData()) {
 					i = new ItemStack(i.getType(), i.getAmount() + 1, i.getData().getData());
 				}
 				if (!inventoryHasProperStack(target, i)) match = false;
 			}
 		}
-		if (!dispenser.contains(block.getTypeId())) {
-			if (!inventoryHasProperStack(target, block)) match = false;
+		if (!dispenser.contains(dispensed.getTypeId())) {
+			if (!inventoryHasProperStack(target, dispensed)) match = false;
 		}
 		return match;
 	}

@@ -51,7 +51,7 @@ class CheckPlayerModifier extends AbstractCheckModifier {
     }
 
     @Override
-    public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed) {
+    public boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock) {
         return false;
     }
 }

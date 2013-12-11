@@ -22,8 +22,8 @@ public class OffsetCommand implements CommandExecutor {
 			return true;
 		}
 
-		Vector v1 = locs[0].toVector();
-		Vector v2 = locs[1].toVector();
+		Vector v1 = locs[1].toVector();
+		Vector v2 = locs[0].toVector();
 		Vector sub = v1.subtract(v2);
 		int zero = 0;
 		int notZero = 0;
@@ -33,9 +33,11 @@ public class OffsetCommand implements CommandExecutor {
 		else notZero = sub.getBlockY();
 		if (sub.getBlockZ() == 0) zero++;
 		else notZero = sub.getBlockZ();
+		if(notZero > 1) notZero--;
+		else if (notZero < 1) notZero++;
 		p.sendMessage(VOXEL_GADGET + "Offest from Point 1 to Point 2:");
-		p.sendMessage(VOXEL_GADGET + ChatColor.DARK_GRAY + "(" + (sub.getBlockX() + 32) + ", " + (sub.getBlockX() + 32) + ", " + (sub.getBlockX() + 32) + ")"
-				+ (zero >= 2 ? " or a standard offset of " + (notZero - 1) : ""));
+		p.sendMessage(VOXEL_GADGET + "(" + (sub.getBlockX() + 32) + ", " + (sub.getBlockY() + 32) + ", " + (sub.getBlockZ() + 32) + ")"
+				+ (zero >= 2 ? " or a standard offset of " + Math.abs(notZero) : ""));
 
 		return true;
 	}

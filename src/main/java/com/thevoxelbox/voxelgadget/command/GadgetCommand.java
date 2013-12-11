@@ -29,6 +29,7 @@ public class GadgetCommand implements CommandExecutor {
 	public static void sendCommandHelp(Player p) {
 		p.sendMessage(VOXEL_GADGET + "Subcommands: ");
 		p.sendMessage(VOXEL_GADGET + "/gadget save blueprintName (focus) (mode)");
+		p.sendMessage(VOXEL_GADGET + "/gadget offset");
 	}
 
 }

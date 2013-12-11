@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class Processor {
@@ -35,6 +36,7 @@ public class Processor {
 	private int current = 0;
 	private boolean check = false;
 	private boolean checkEnabled = false;
+	private Inventory invOverride = null;
 
 	public Processor(Map<Integer, ModifierType> config, VoxelGadget gadget) {
 		this.config = config;
@@ -346,5 +348,13 @@ public class Processor {
 	public boolean isCheckEnabled() {
 		return checkEnabled;
 	}
+
+    public Inventory getInvOverride() {
+        return invOverride;
+    }
+
+    public void setInvOverride(Inventory invOverride) {
+        this.invOverride = invOverride;
+    }
 
 }

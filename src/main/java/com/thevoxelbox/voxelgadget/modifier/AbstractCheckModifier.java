@@ -28,14 +28,14 @@ public abstract class AbstractCheckModifier extends AbstractModifier {
 		Inventory dispenser;
 		if (behind.getState() instanceof InventoryHolder) {
 			dispenser = ((InventoryHolder) behind.getState()).getInventory();
+			p.setInvOverride(dispenser);
 			offset = 1;
 		} else {
-			dispenser = ((Dispenser) p.getDispenser().getState()).getInventory();
+			dispenser = ((p.getInvOverride() == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : p.getInvOverride());
 		}
 		p.setCheck(runCheck(target, dispenser, p.getBlock(), existing) || p.getCheck());
 		return offset;
 	}
 
 	public abstract boolean runCheck(Inventory target, Inventory dispenser, ItemStack dispensed, Block targetBlock);
-	
 }

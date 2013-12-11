@@ -60,7 +60,7 @@ public class GadgetListener implements Listener {
 			for (ModifierType type : ModifierType.values()) {
 				String value = gadget.getConfig().getString(type.toString());
 				String[] split;
-				if (value.contains(":")) split = value.split(":");
+				if (value != null && value.contains(":")) split = value.split(":");
 				else {
 					split = new String[2];
 					split[0] = value;

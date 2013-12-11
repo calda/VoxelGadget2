@@ -158,6 +158,7 @@ public class BlueprintModifier {
 	public void setBlock(ComboBlock block, int x, int y, int z, OverrideMode mode, Processor p) {
 		Location start = p.getOffset3D();
 		if (start == null) start = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		//System.out.print
 		start.add(x, y, z);
 		Block change = start.getWorld().getBlockAt(start);
 		if (block.getID() == 0 && mode != OverrideMode.ALL) return;

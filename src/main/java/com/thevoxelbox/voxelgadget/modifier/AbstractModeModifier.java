@@ -49,6 +49,7 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			if (radius > 5) radius = 5;
 			if (offset == -1) offset = 0;
 			Block center = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), offset + 1);
+			if(p.getOffset3D() != null) center = p.getOffset3D().getBlock();
 			for (int i = 0 - radius; i <= radius; i++) {
 				for (int j = 0 - radius; j <= radius; j++) {
 					Block set = null;
@@ -70,6 +71,7 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			//System.out.println("l:" + length + " o:" + offset);
 			for (int i = 0; i < length; i++) {
 				Block set = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), i + offset + 2);
+				if(p.getOffset3D() != null) set = p.getOffset3D().getBlock().getRelative(p.getTrain().getOppositeFace(), i);
 				actualSetBlock(d, set, newID, newData, applyPhysics, p);
 			}
 		} else actualSetBlock(d, existing, newID, newData, applyPhysics, p);

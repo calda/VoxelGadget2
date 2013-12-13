@@ -26,10 +26,29 @@ public class SetInventoryModifier extends AbstractModeModifier {
             existing = p.getOffset3D().getBlock();
         }
         if (existing.getState() instanceof InventoryHolder) {
-            InventoryHolder block = (InventoryHolder) existing.getState();
+            Inventory target = ((InventoryHolder) existing.getState()).getInventory();
             Inventory disp = ((p.getInvOverride() == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : p.getInvOverride());
-            block.getInventory().setContents(disp.getContents());
-            block.getInventory().addItem(p.getBlock());
+            if (p.getInvOverride() != null) {
+                if (p.getOverride() != null) {
+                    if (disp.contains(p.getOverride().getType()) && target.contains(p.getOverride().getType())) {
+                        target.setItem(target.first(p.getOverride().getType()), disp.getItem(disp.first(p.getOverride().getType())));
+                    }
+                } else {
+                    target.setContents(disp.getContents());
+                }
+            } else {
+                if (p.getOverride() != null) {
+                    if (disp.contains(p.getOverride().getType()) && target.contains(p.getOverride().getType())) {
+                        target.setItem(target.first(p.getOverride().getType()), disp.getItem(disp.first(p.getOverride().getType())));
+                        if (p.getOverride().getType().equals(p.getBlock().getType())) {
+                            target.addItem(p.getBlock());
+                        }
+                    }
+                } else {
+                    target.setContents(disp.getContents());
+                    target.addItem(p.getBlock());
+                }
+            }
         }
         return 0;
     }

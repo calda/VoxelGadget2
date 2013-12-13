@@ -36,7 +36,7 @@ public class OffsetCommand implements CommandExecutor {
 		else notZero = sub.getBlockY();
 		if (sub.getBlockZ() == 0) zero++;
 		else notZero = sub.getBlockZ();
-		if (notZero > 1) notZero--;
+		if(notZero > 1) notZero--;
 		else if (notZero < 1) notZero++;
 		p.sendMessage(VOXEL_GADGET + "Offest from Point 1 to Point 2:");
 		p.sendMessage(VOXEL_GADGET + "(" + (sub.getBlockX() + 32) + ", " + (sub.getBlockY() + 32) + ", " + (sub.getBlockZ() + 32) + ")"

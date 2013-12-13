@@ -27,22 +27,15 @@ public class GetInventoryModifier extends AbstractModeModifier {
             existing = p.getOffset3D().getBlock();
         }
         if (existing.getState() instanceof InventoryHolder) {
-            InventoryHolder target = (InventoryHolder) existing.getState();
+            InventoryHolder block = (InventoryHolder) existing.getState();
             final Inventory disp = ((p.getInvOverride() == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : p.getInvOverride());
             final ItemStack[] newInventory = new ItemStack[disp.getSize()];
-            if (p.getOverride() != null) {
-                if (target.getInventory().contains(p.getOverride().getType())) {
-                    newInventory[0] = target.getInventory().getItem(target.getInventory().first(p.getOverride().getType()));
-                    disp.setContents(newInventory);
+            for (int i = 0; i < Math.min(block.getInventory().getSize(), disp.getSize()); i++) {
+                newInventory[i] = block.getInventory().getItem(i);
+                if (newInventory[i] == null) {
+                    newInventory[i] = new ItemStack(0, 1);
                 }
-            } else {
-                for (int i = 0; i < Math.min(target.getInventory().getSize(), disp.getSize()); i++) {
-                    newInventory[i] = target.getInventory().getItem(i);
-                    if (newInventory[i] == null) {
-                        newInventory[i] = new ItemStack(0, 1);
-                    }
-                    disp.setContents(newInventory);
-                }
+                disp.setContents(newInventory);
             }
         }
         return 0;

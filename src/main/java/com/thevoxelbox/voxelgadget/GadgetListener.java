@@ -44,6 +44,7 @@ public class GadgetListener implements Listener {
 			else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) index = 1;
 			if (index == -1) return;
 			Player p = e.getPlayer();
+			if (p.isSneaking()) index = 2;
 			SaveCommand.addPoint(p.getName(), index, e.getClickedBlock().getLocation());
 			p.sendMessage(VOXEL_GADGET + "Set point " + (index + 1));
 			e.setCancelled(true);

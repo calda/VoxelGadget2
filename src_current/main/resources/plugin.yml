@@ -1,9 +1,0 @@
-name: ${project.artifactId}
-main: com.thevoxelbox.voxelgadget.VoxelGadget
-version: ${project.build.version}
-website: ${project.url}
-authors: [CalDaBeast]
-description: ${project.description}
-commands:
-  gadget:
-    description: The main command for use with VoxelGadget2.

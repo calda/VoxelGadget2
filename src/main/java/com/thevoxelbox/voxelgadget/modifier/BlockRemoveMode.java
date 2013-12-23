@@ -7,7 +7,7 @@ public class BlockRemoveMode extends AbstractModeModifier {
 
     @Override
     public int modify(Processor p) {
-		if (p.getBlock().getTypeId() == 387) {
+		if (p.getDispensed().getTypeId() == 387) {
 			(new BlueprintModifier()).remove(p);
 			return 0;
 		}

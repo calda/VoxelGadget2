@@ -25,7 +25,7 @@ public class Processor {
     private boolean areaEnabled = false;
     private boolean lineEnabled = false;
     private boolean timerEnabled = false;
-    private ItemStack block;
+    private ItemStack dispensedItem;
     private Block override = null;
     private boolean overrideAbsolute = false;
     private Block filter = null;
@@ -50,7 +50,7 @@ public class Processor {
             return true;
         }
         this.dispenser = dispenser;
-        this.setBlock(block);
+        this.setDispensed(block);
         for (BlockFace face : faces) {
             Block possibleModeBlock = dispenser.getRelative(face);
             ComboBlock possibleModeCombo = new ComboBlock(possibleModeBlock.getTypeId(), possibleModeBlock.getData());
@@ -222,15 +222,15 @@ public class Processor {
     /**
      * @return the block
      */
-    public ItemStack getBlock() {
-        return block;
+    public ItemStack getDispensed() {
+        return dispensedItem;
     }
 
     /**
      * @param block the block to set
      */
-    public void setBlock(ItemStack block) {
-        this.block = block;
+    public void setDispensed(ItemStack block) {
+        this.dispensedItem = block;
     }
 
     /**

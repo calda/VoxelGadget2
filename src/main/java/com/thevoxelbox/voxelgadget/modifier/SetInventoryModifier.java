@@ -40,13 +40,13 @@ public class SetInventoryModifier extends AbstractModeModifier {
                 if (p.getOverride() != null) {
                     if (disp.contains(p.getOverride().getType()) && target.contains(p.getOverride().getType())) {
                         target.setItem(target.first(p.getOverride().getType()), disp.getItem(disp.first(p.getOverride().getType())));
-                        if (p.getOverride().getType().equals(p.getBlock().getType())) {
-                            target.addItem(p.getBlock());
+                        if (p.getOverride().getType().equals(p.getDispensed().getType())) {
+                            target.addItem(p.getDispensed());
                         }
                     }
                 } else {
                     target.setContents(disp.getContents());
-                    target.addItem(p.getBlock());
+                    target.addItem(p.getDispensed());
                 }
             }
         }

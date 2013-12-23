@@ -17,7 +17,7 @@ class InventoryModifier extends AbstractModifier {
         Dispenser disp = (Dispenser) dispenser.getState();
         Inventory inv = disp.getInventory();
         for (ItemStack item : inv.getContents()) {
-            if (item != null && item.getTypeId() == p.getBlock().getTypeId() && item.getData().getData() == p.getBlock().getData().getData()) {
+            if (item != null && item.getTypeId() == p.getDispensed().getTypeId() && item.getData().getData() == p.getDispensed().getData().getData()) {
                 similars.add(item);
             }
         }

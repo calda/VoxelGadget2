@@ -17,7 +17,7 @@ public abstract class AbstractCheckModifier extends AbstractModifier {
         }
         if (!(existing.getState() instanceof InventoryHolder)) {
             try {
-                p.setCheck(runCheck(null, null, p.getBlock(), existing, p.getInvOverride() != null) || p.getCheck());
+                p.setCheck(runCheck(null, null, p.getDispensed(), existing, p.getInvOverride() != null) || p.getCheck());
                 return 0;
             } catch (NullPointerException e) {
                 return 0;
@@ -31,7 +31,7 @@ public abstract class AbstractCheckModifier extends AbstractModifier {
             dispenser = ((Dispenser) p.getDispenser().getState()).getInventory();
         }
 
-        p.setCheck(runCheck(target, dispenser, p.getBlock(), existing, p.getInvOverride() != null) || p.getCheck());
+        p.setCheck(runCheck(target, dispenser, p.getDispensed(), existing, p.getInvOverride() != null) || p.getCheck());
         return 0;
     }
 

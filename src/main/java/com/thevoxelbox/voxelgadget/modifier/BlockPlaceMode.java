@@ -7,13 +7,13 @@ public class BlockPlaceMode extends AbstractModeModifier {
 
 	@Override
 	public int modify(Processor p) {
-		if (p.getBlock().getTypeId() == 387) {
+		if (p.getDispensed().getTypeId() == 387) {
 			(new BlueprintModifier()).paste(p);
 			return 0;
 		}
 		Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
 		if (p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
-		if (p.getOverride() == null) setBlock(existing, p.getBlock().getTypeId(), (byte) p.getBlock().getData().getData(), p.applyPhysics(), p);
+		if (p.getOverride() == null) setBlock(existing, p.getDispensed().getTypeId(), (byte) p.getDispensed().getData().getData(), p.applyPhysics(), p);
 		else setBlock(existing, p.getOverride().getTypeId(), (byte) p.getOverride().getData(), p.applyPhysics(), p);
 		return 0;
 	}

@@ -63,7 +63,7 @@ public class BlueprintModifier {
 	}
 
 	public boolean checkIfExists(Processor p) {
-		BookMeta meta = (BookMeta) p.getBlock().getItemMeta();
+		BookMeta meta = (BookMeta) p.getDispensed().getItemMeta();
 		String page = meta.getPage(1);
 		String[] lines = page.split("\n");
 		//retrieve dimensions
@@ -93,7 +93,7 @@ public class BlueprintModifier {
 	}
 
 	public void remove(Processor p) {
-		BookMeta meta = (BookMeta) p.getBlock().getItemMeta();
+		BookMeta meta = (BookMeta) p.getDispensed().getItemMeta();
 		String page = meta.getPage(1);
 		String[] lines = page.split("\n");
 		//retrieve dimensions
@@ -119,7 +119,7 @@ public class BlueprintModifier {
 	}
 
 	public void paste(Processor p) {
-		BookMeta meta = (BookMeta) p.getBlock().getItemMeta();
+		BookMeta meta = (BookMeta) p.getDispensed().getItemMeta();
 		String page = meta.getPage(1);
 		String[] lines = page.split("\n");
 		//retrieve dimensions

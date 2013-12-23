@@ -20,7 +20,7 @@ public class SaveCommand implements CommandExecutor {
 
 	public static void addPoint(String name, int index, Location point) {
 		if (!POINTS.containsKey(name)) {
-			Location[] locs = new Location[2];
+			Location[] locs = new Location[3];
 			locs[index] = point;
 			POINTS.put(name, locs);
 		} else {
@@ -33,7 +33,7 @@ public class SaveCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender cs, Command cmnd, String label, String[] args) {
 		Player p = (Player) cs;
 		if (args.length < 1) {
-			p.sendMessage(VOXEL_GADGET + "/gadget save blueprintName (focus) (mode)");
+			p.sendMessage(VOXEL_GADGET + "/gadget save blueprintName (mode)");
 			return true;
 		}
 		Location[] locs = POINTS.get(p.getName());

@@ -84,12 +84,12 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			//if (i.firstEmpty() != -1) i.addItem(new ItemStack(newID, 1, newData));
 			int amount = 0;
 			for (ItemStack is : d.getInventory().getContents()) {
-				if (is != null && is.getTypeId() == p.getBlock().getTypeId() && is.getData().getData() == p.getBlock().getData().getData()) {
+				if (is != null && is.getTypeId() == p.getDispensed().getTypeId() && is.getData().getData() == p.getDispensed().getData().getData()) {
 					amount += is.getAmount() + 1;
 				}
 			}
 			if (newID == 0) {
-				i.removeItem(new ItemStack(p.getBlock().getTypeId(), amount, p.getBlock().getData().getData()));
+				i.removeItem(new ItemStack(p.getDispensed().getTypeId(), amount, p.getDispensed().getData().getData()));
 			} else {
 				i.addItem(new ItemStack(newID, amount, newData));
 			}

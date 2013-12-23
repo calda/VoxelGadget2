@@ -20,7 +20,7 @@ public class DecoderModifier extends AbstractModifier {
 			Inventory dispenser = ((Dispenser) p.getDispenser().getState()).getInventory();
 			ItemStack firstFound = null;
 			for (ItemStack item : dispenser.getContents()) {
-				if (item != null && item.getTypeId() == p.getBlock().getTypeId() && item.getData().getData() == p.getBlock().getData().getData()) {
+				if (item != null && item.getTypeId() == p.getDispensed().getTypeId() && item.getData().getData() == p.getDispensed().getData().getData()) {
 					firstFound = item;
 					break;
 				}
@@ -30,7 +30,7 @@ public class DecoderModifier extends AbstractModifier {
 				if(amount > iBehind.getSize()) amount = iBehind.getSize() - 1;
 				ItemStack replace = iBehind.getItem(amount);
 				if(replace == null) replace = new ItemStack(0);
-				p.setBlock(replace);
+				p.setDispensed(replace);
 			}
 			return 1;
 		}

@@ -75,17 +75,12 @@ public class SaveCommand implements CommandExecutor {
 		book.add("DIM " + dimX + "x" + dimY + "x" + dimZ);
 		book.add("REPLACE " + mode.toString());
 
-		Location northWest;
-		if (locs[0].getBlockX() < locs[1].getBlockX() && locs[0].getBlockZ() > locs[1].getBlockZ()) {
-			northWest = locs[0];
-		} else if (locs[1].getBlockX() < locs[0].getBlockX() && locs[1].getBlockZ() > locs[0].getBlockZ()) {
-			northWest = locs[1];
-		} else {
-			Location lowest = (locs[0].getBlockY() > locs[1].getBlockY() ? locs[1] : locs[0]);
-			Location westMost = (locs[0].getBlockX() > locs[1].getBlockX() ? locs[1] : locs[0]);
-			Location northMost = (locs[0].getBlockZ() > locs[1].getBlockZ() ? locs[1] : locs[0]);
-			northWest = new Location(locs[1].getWorld(), westMost.getBlockX(), lowest.getBlockY(), northMost.getBlockZ());
-		}
+		Location lowest = (locs[0].getBlockY() > locs[1].getBlockY() ? locs[1] : locs[0]);
+		Location westMost = (locs[0].getBlockX() > locs[1].getBlockX() ? locs[1] : locs[0]);
+		Location northMost = (locs[0].getBlockZ() > locs[1].getBlockZ() ? locs[1] : locs[0]);
+		Location northWest = new Location(locs[1].getWorld(), westMost.getBlockX(), lowest.getBlockY(), northMost.getBlockZ());
+
+		//System.out.println(northWest);
 
 		for (int y = 0; y < dimY; y++) {
 			book.add("\n");
@@ -102,11 +97,17 @@ public class SaveCommand implements CommandExecutor {
 			}
 		}
 
-		StringBuilder bookContent = new StringBuilder();
-		for (String s : book) {
-			bookContent.append(s).append("\n");
+		int numPages = (book.size() / 10) + (book.size() % 10 > 0 ? 1 : 0);
+		for (int i = 0; i < numPages; i++) {
+			int startingIndex = i * 10;
+			StringBuilder bookPage = new StringBuilder();
+			//System.out.println("Page " + i + " : " + startingIndex + " - " + Math.min(startingIndex + 9, book.size() - 1));
+			for (int j = startingIndex; j <= Math.min(startingIndex + 9, book.size() - 1); j++) {
+				//System.out.println("Page " + i + " line " + (j - startingIndex + 1) + ": " + book.get(j));
+				bookPage.append(book.get(j)).append("\n");
+			}
+			meta.addPage(bookPage.toString());
 		}
-		meta.addPage(bookContent.toString());
 
 		stack.setItemMeta(meta);
 		p.getInventory().addItem(stack);

@@ -1,6 +1,8 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 import org.bukkit.Location;
@@ -62,16 +64,25 @@ public class BlueprintModifier {
 		NONE, AIR, ALL;
 	}
 
+	private String[] getLines(BookMeta meta) {
+		ArrayList<String> lines = new ArrayList<String>();
+		for (String page : meta.getPages()) {
+			lines.addAll(Arrays.asList(page.split("\n")));
+		}
+		return lines.toArray(new String[1]);
+	}
+
 	public boolean checkIfExists(Processor p) {
 		BookMeta meta = (BookMeta) p.getDispensed().getItemMeta();
-		String page = meta.getPage(1);
-		String[] lines = page.split("\n");
+		String[] lines = getLines(meta);
 		//retrieve dimensions
 		String[] dim = lines[2].substring(4).split("x");
 		int dimX = Integer.parseInt(dim[0]);
 		int dimY = Integer.parseInt(dim[1]);
 		int dimZ = Integer.parseInt(dim[2]);
 
+		int existsCount = 0;
+		int totalBlocks = 0;
 		for (int y = 0; y < dimY; y++) {
 			int start = 6 + (y * (dimZ + 2));
 			for (int z = 0; z < dimZ; z++) {
@@ -83,19 +94,22 @@ public class BlueprintModifier {
 					String[] split = block.split(":");
 					if (split.length == 2) combo = new ComboBlock(Integer.parseInt(split[0]), Byte.parseByte(split[1]));
 					else combo = new ComboBlock(Integer.parseInt(split[0]));
-					if (combo.getID() != 0 && this.blockExists(combo, x, y, z, p)) {
-						return true;
+					if (combo.getID() != 0) {
+						totalBlocks += 1;
+						if (this.blockExists(combo, x, y, z, p)) existsCount += 1;
 					}
 				}
 			}
 		}
-		return false;
+		//returns that the blueprint exists if at least half of its blocks match
+		//System.out.println(existsCount + " blocks exist out of " + totalBlocks);
+		//System.out.println("Needs " + (totalBlocks - (totalBlocks / 4)));
+		return existsCount > (totalBlocks - (totalBlocks / 4));
 	}
 
 	public void remove(Processor p) {
 		BookMeta meta = (BookMeta) p.getDispensed().getItemMeta();
-		String page = meta.getPage(1);
-		String[] lines = page.split("\n");
+		String[] lines = getLines(meta);
 		//retrieve dimensions
 		String[] dim = lines[2].substring(4).split("x");
 		int dimX = Integer.parseInt(dim[0]);
@@ -120,8 +134,7 @@ public class BlueprintModifier {
 
 	public void paste(Processor p) {
 		BookMeta meta = (BookMeta) p.getDispensed().getItemMeta();
-		String page = meta.getPage(1);
-		String[] lines = page.split("\n");
+		String[] lines = getLines(meta);
 		//retrieve dimensions
 		String[] dim = lines[2].substring(4).split("x");
 		int dimX = Integer.parseInt(dim[0]);

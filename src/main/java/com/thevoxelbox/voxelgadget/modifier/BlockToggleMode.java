@@ -16,7 +16,6 @@ public class BlockToggleMode extends AbstractModeModifier {
 		Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), (p.isLineEnabled()
 				|| p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
 		if (p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
-		System.out.println(p.isOverrideAbsolute());
 		if (p.isOverrideAbsolute()) {
 			toggleBetween(existing, p.getDispensed().getTypeId(), p.getDispensed().getData().getData(), p.getOverride().getTypeId(), p.getOverride().getData(), p);
 		} else {

@@ -44,5 +44,9 @@ public class ComboBlock {
     public String toString() {
         return "ComboBlock[id=" + id + "; data=" + data + "]";
     }
+	
+	public boolean equals(ComboBlock combo){
+		return id == combo.getID() && data == combo.getData();
+	}
 
 }

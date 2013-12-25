@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
+import org.bukkit.block.Block;
 
 /**
  * A special Modifier to easily create multiple OffsetModifiers which all do the same thing with different values.
@@ -14,7 +15,7 @@ public class OffsetModifier extends AbstractModifier {
     }
 
     @Override
-    public int modify(Processor p) {
+    public int modify(Processor p, Block nextBlock) {
         p.addOffset(offset);
         if (p.getOffset() > 100) p.setOffset(100);
         else if (p.getOffset() < 1) p.setOffset(1);

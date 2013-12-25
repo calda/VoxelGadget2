@@ -12,8 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 public class ThreeDimModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p) {
-		Block behind = p.getDispenser().getRelative(p.getTrain(), p.getCurrent() + 1);
+	public int modify(Processor p, Block behind) {
 		if (behind.getState() instanceof InventoryHolder) {
 			Inventory iBehind = ((InventoryHolder) behind.getState()).getInventory();
 			try {
@@ -25,7 +24,9 @@ public class ThreeDimModifier extends AbstractModifier {
 			} catch (NullPointerException e) {
 				return 0;
 			}
-		} return 1;
+			return 1;
+		}
+		return 0;
 	}
 
 }

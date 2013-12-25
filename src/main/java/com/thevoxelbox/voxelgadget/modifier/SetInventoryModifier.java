@@ -9,9 +9,8 @@ import org.bukkit.inventory.InventoryHolder;
 public class SetInventoryModifier extends AbstractModeModifier {
 
     @Override
-    public int modify(Processor p) {
+    public int modify(Processor p, Block behind) {
         p.setMode(ModifierType.SET_INVENTORY);
-        Block behind = p.getDispenser().getRelative(p.getTrain(), p.getCurrent() + 1);
         if (behind.getState() instanceof InventoryHolder) {
             p.setInvOverride(((InventoryHolder) behind.getState()).getInventory());
             return 1;

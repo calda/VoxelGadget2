@@ -1,6 +1,6 @@
 #Keeps track of what version your config is in case a new
 #modifier is released and needs to be added to your config.
-CONFIG_VERSION: 3
+CONFIG_VERSION: 4
 AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE: true
 
 #Remove or comment out line to remove a modifier from Gadget
@@ -22,6 +22,7 @@ LINE: "35:2"
 AREA: "35:1"
 FILTER: "35:4"
 SKIP: "35"
+PATCH: "159:11"
 DUMMY: "35:6"
 ADD1: "35:9"
 ADD5: "35:11"

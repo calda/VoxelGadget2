@@ -2,6 +2,7 @@ package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 
 public enum ModifierType {
 
@@ -18,6 +19,7 @@ public enum ModifierType {
 	FILTER(new FilterModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 4)),
 	SKIP(new SkipModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 0)),
 	DUMMY(null, Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 6)),
+	PATCH(new PatchModifier(), Type.SPECIAL, new ComboBlock(Material.STAINED_CLAY, (byte) 11)),
 	ADD1(new OffsetModifier(1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 9)),
 	ADD5(new OffsetModifier(5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 11)),
 	ADD10(new OffsetModifier(10), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 10)),
@@ -55,8 +57,8 @@ public enum ModifierType {
 	 * @param p the Processor that called the method
 	 * @return true if the modifications were successful
 	 */
-	public int callModify(Processor p) {
-		if (modifier != null) return modifier.modify(p);
+	public int callModify(Processor p, Block nextBlock) {
+		if (modifier != null) return modifier.modify(p, nextBlock);
 		return 0;
 	}
 

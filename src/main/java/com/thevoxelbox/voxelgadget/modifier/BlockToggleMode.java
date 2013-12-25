@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 public class BlockToggleMode extends AbstractModeModifier {
 
 	@Override
-	public int modify(Processor p) {
+	public int modify(Processor p, Block nextBlock) {
 		if (p.getDispensed().getTypeId() == 387) { //handle for blueprints
 			BlueprintModifier blueprint = new BlueprintModifier();
 			if (blueprint.checkIfExists(p)) blueprint.remove(p);

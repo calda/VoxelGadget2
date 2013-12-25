@@ -1,6 +1,7 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
+import org.bukkit.block.Block;
 
 public abstract class AbstractModifier {
 
@@ -9,6 +10,6 @@ public abstract class AbstractModifier {
      * @param p the Processor to modify
      * @return true if successful
      */
-    public abstract int modify(Processor p);
+    public abstract int modify(Processor p, Block nextBlock);
 
 }

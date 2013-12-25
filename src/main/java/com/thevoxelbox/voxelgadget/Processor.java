@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 public class Processor {
 
 	final Map<Integer, ModifierType> config;
-	final BlockFace[] faces = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
+	public final BlockFace[] faces = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
 	private final VoxelGadget gadget;
 	private int offset = 1;
 	private int size = 0;
@@ -78,12 +78,12 @@ public class Processor {
 					current++;
 				}
 			} else {
-				int skip = modifier.callModify(this);
+				int skip = modifier.callModify(this, dispenser.getRelative(getTrain(), current + 1));
 				current += skip;
 			}
 		}
 		for (ModifierType modifier : checkLater) {
-			modifier.callModify(this);
+			modifier.callModify(this, dispenser.getRelative(getTrain(), current + 1));
 		}
 		if (initial && isTimerEnabled()) {
 			final Processor owner = this;

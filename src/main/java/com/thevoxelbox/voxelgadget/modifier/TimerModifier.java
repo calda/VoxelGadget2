@@ -2,11 +2,12 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
+import org.bukkit.block.Block;
 
 public class TimerModifier extends AbstractModifier {
 	
 	@Override
-	public int modify(Processor p) {
+	public int modify(Processor p, Block nextBlock) {
 		if (p.isTimerEnabled()) {
 			p.setWillSkipFirst(true);
 		} else {

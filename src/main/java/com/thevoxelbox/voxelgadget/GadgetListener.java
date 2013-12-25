@@ -5,7 +5,11 @@ import static com.thevoxelbox.voxelgadget.command.GadgetCommand.VOXEL_GADGET;
 import com.thevoxelbox.voxelgadget.command.SaveCommand;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,6 +55,8 @@ public class GadgetListener implements Listener {
 		}
 	}
 
+	final private int CONFIG_VERSION = 4; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
+
 	/**
 	 * Loads the configuration for VoxelGadget2.
 	 * If there is no config file, it is auto-generated.
@@ -79,6 +85,33 @@ public class GadgetListener implements Listener {
 				}
 			}
 			log.info("[VoxelGadget] Config loaded");
+
+			//if the config is out of date, update but preserve old values
+			if (gadget.getConfig().getInt("CONFIG_VERSION") != CONFIG_VERSION) {
+				if (gadget.getConfig().getBoolean("AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE")) {
+					final HashMap<ModifierType, String> previousValues = new HashMap<ModifierType, String>();
+					for (ModifierType type : ModifierType.values()) {
+						String previous = gadget.getConfig().getString(type.toString());
+						if (previous != null) {
+							previousValues.put(type, previous);
+						}
+					}
+					try {
+						gadget.getConfig().save("plugins/VoxelGadget2/configV" + (CONFIG_VERSION - 1) + ".yml");
+					} catch (IOException ex) {
+						log.info("[VoxelGadget] Unable to copy old config first.");
+					}
+					f.delete();
+					gadget.saveDefaultConfig();
+					gadget.reloadConfig();
+					for (ModifierType type : previousValues.keySet()) {
+						gadget.getConfig().set(type.toString(), previousValues.get(type));
+					}
+					gadget.saveConfig();
+					log.info("[VoxelGadget] Config Updated to CONFIG VERSION " + CONFIG_VERSION);
+					log.info("[VoxelGadget] Your previous version of the config has been saved as configV" +(CONFIG_VERSION - 1) + ".yml");
+				} else log.info("[VoxelGadget] CONFIG VERSION " + CONFIG_VERSION + " is avaliable but you have disabled automatic config updates.");
+			}
 		} else {
 			for (ModifierType type : ModifierType.values()) {
 				config.put(((type.getDefaultBlock().getID() << 8) | type.getDefaultBlock().getData()), type);

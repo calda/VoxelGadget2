@@ -20,7 +20,7 @@ class CheckPlayerModifier extends AbstractCheckModifier {
 
     @Override
     public int modify(Processor p, Block nextBlock) {
-        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
         if (p.getOffset3D() != null) {
             existing = p.getOffset3D().getBlock();
         }

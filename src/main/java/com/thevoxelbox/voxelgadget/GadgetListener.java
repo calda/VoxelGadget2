@@ -8,9 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,10 +18,10 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class GadgetListener implements Listener {
-
+	
 	final VoxelGadget gadget;
 	final TreeMap<Integer, ModifierType> config = new TreeMap<Integer, ModifierType>();
-
+	
 	public GadgetListener(VoxelGadget gadget) {
 		this.gadget = gadget;
 	}
@@ -34,12 +33,16 @@ public class GadgetListener implements Listener {
 	 */
 	@EventHandler
 	public void onDispenserDispense(BlockDispenseEvent e) {
-		if (e.getItem().getType().isBlock() || e.getItem().getTypeId() == 387) {
-			Processor processor = new Processor(config, gadget);
-			e.setCancelled(processor.process(e.getBlock(), e.getItem(), true));
+		if (e.getItem().getType().isBlock() || e.getItem().getTypeId() == 387) { //block or Blueprint (written book)
+			boolean wasAGadget = false;
+			for (BlockFace face : Processor.FACES) {
+				boolean hadTail = (new Processor(config, gadget).process(e.getBlock(), face, e.getItem(), true));
+				wasAGadget = wasAGadget || hadTail;
+			}
+			e.setCancelled(wasAGadget);
 		}
 	}
-
+	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		if (e.getMaterial() == Material.BOOK) {
@@ -54,7 +57,7 @@ public class GadgetListener implements Listener {
 			e.setCancelled(true);
 		}
 	}
-
+	
 	final private int CONFIG_VERSION = 5; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
 
 	/**
@@ -109,7 +112,7 @@ public class GadgetListener implements Listener {
 					}
 					gadget.saveConfig();
 					log.info("[VoxelGadget] Config Updated to CONFIG VERSION " + CONFIG_VERSION);
-					log.info("[VoxelGadget] Your previous version of the config has been saved as configV" +(CONFIG_VERSION - 1) + ".yml");
+					log.info("[VoxelGadget] Your previous version of the config has been saved as configV" + (CONFIG_VERSION - 1) + ".yml");
 				} else log.info("[VoxelGadget] CONFIG VERSION " + CONFIG_VERSION + " is avaliable but you have disabled automatic config updates.");
 			}
 		} else {

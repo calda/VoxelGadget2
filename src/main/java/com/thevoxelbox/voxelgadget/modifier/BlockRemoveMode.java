@@ -11,7 +11,7 @@ public class BlockRemoveMode extends AbstractModeModifier {
 			(new BlueprintModifier()).remove(p);
 			return 0;
 		}
-        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
 		if(p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
         setBlock(existing, 0, (byte) 0, p.applyPhysics(), p);
         return 0;

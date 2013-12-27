@@ -170,7 +170,7 @@ public class BlueprintModifier {
 
 	public void setBlock(ComboBlock block, int x, int y, int z, OverrideMode mode, Processor p) {
 		Location offset = p.getOffset3D();
-		if (offset == null) offset = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		if (offset == null) offset = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset()).getLocation();
 		Location start = new Location(offset.getWorld(), offset.getBlockX() + x, offset.getBlockY() + y, offset.getBlockZ() + z);
 		Block change = start.getWorld().getBlockAt(start);
 		if (block.getID() == 0 && mode != OverrideMode.ALL) return;
@@ -181,7 +181,7 @@ public class BlueprintModifier {
 
 	public void removeBlock(int x, int y, int z, Processor p, boolean fall) {
 		Location offset = p.getOffset3D();
-		if (offset == null) offset = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		if (offset == null) offset = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset()).getLocation();
 		Location start = new Location(offset.getWorld(), offset.getBlockX() + x, offset.getBlockY() + y, offset.getBlockZ() + z);
 		Block change = start.getWorld().getBlockAt(start);
 		if (FALLOFF_MATERIALS.contains(Material.getMaterial(change.getTypeId())) == fall) {
@@ -192,7 +192,7 @@ public class BlueprintModifier {
 
 	public boolean blockExists(ComboBlock block, int x, int y, int z, Processor p) {
 		Location offset = p.getOffset3D();
-		if (offset == null) offset = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset()).getLocation();
+		if (offset == null) offset = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset()).getLocation();
 		Location start = new Location(offset.getWorld(), offset.getBlockX() + x, offset.getBlockY() + y, offset.getBlockZ() + z);
 		Block check = start.getWorld().getBlockAt(start);
 		return check.getTypeId() == block.getID() && check.getData() == block.getData();

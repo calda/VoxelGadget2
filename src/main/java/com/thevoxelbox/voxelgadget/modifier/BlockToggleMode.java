@@ -13,7 +13,7 @@ public class BlockToggleMode extends AbstractModeModifier {
 			else blueprint.paste(p);
 			return 0;
 		}
-		Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), (p.isLineEnabled()
+		Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), (p.isLineEnabled()
 				|| p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
 		if (p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
 		if (p.isOverrideAbsolute()) {

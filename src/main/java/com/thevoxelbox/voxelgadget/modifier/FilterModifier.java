@@ -7,7 +7,7 @@ public class FilterModifier extends AbstractModifier {
 
 	@Override
 	public int modify(Processor p, Block nextBlock) {
-		p.setFilter(p.getDispenser().getRelative(p.getTrain(), p.getCurrent() + 1));
+		p.setFilter(p.getDispenser().getRelative(p.getTail(), p.getCurrent() + 1));
 		return 1;
 	}
 

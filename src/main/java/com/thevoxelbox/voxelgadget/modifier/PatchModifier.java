@@ -14,7 +14,7 @@ public class PatchModifier extends AbstractModifier {
 	public int modify(Processor p, Block behind) {
 		if (behind.getState() instanceof InventoryHolder) {
 			if (behind.getState() instanceof Dispenser) {
-				for (BlockFace face : p.faces) {
+				for (BlockFace face : p.FACES) {
 					if (p.getModifierFromConfig(new ComboBlock(behind.getRelative(face))) == ModifierType.PATCH) {
 						ModifierType behindDispenser = p.getModifierFromConfig(new ComboBlock(behind.getRelative(face.getOppositeFace())));
 						if (behindDispenser != null && behindDispenser.getType() == ModifierType.Type.MODE) {
@@ -29,12 +29,12 @@ public class PatchModifier extends AbstractModifier {
 				int offy = (iBehind.getItem(1) == null ? 0 : iBehind.getItem(1).getAmount() - 32);
 				int offz = (iBehind.getItem(1) == null ? 0 : iBehind.getItem(2).getAmount() - 32);
 				Location offsetTemp = new Location(p.getDispenser().getWorld(), offx, offy, offz);
-				Block patchBlock = p.getDispenser().getRelative(p.getTrain(), p.getCurrent());
+				Block patchBlock = p.getDispenser().getRelative(p.getTail(), p.getCurrent());
 				Block patchStart = patchBlock.getLocation().add(offsetTemp).getBlock();
 				//System.out.println(patchStart.getType());
 				BlockFace patchTail = null;
 				if (ModifierType.PATCH.getDefaultBlock().equals(new ComboBlock(patchStart))) {
-					for (BlockFace face : p.faces) {
+					for (BlockFace face : p.FACES) {
 						ModifierType type = p.getModifierFromConfig(new ComboBlock(patchStart.getRelative(face)));
 						if (type != null) {
 							patchTail = face;

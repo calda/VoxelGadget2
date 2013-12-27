@@ -21,7 +21,7 @@ public class GetInventoryModifier extends AbstractModeModifier {
 
     @Override
     public int modeModify(Processor p) {
-        Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
         if (p.getOffset3D() != null) {
             existing = p.getOffset3D().getBlock();
         }

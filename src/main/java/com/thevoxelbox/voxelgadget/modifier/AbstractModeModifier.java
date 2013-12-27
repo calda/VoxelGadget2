@@ -19,7 +19,7 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 	 * @return true if successful
 	 */
 	public int modeModify(Processor p) {
-		Block existing = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), p.getOffset());
+		Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
 		if (p.getOffset3D() != null) existing = p.getDispenser().getLocation().add(p.getOffset3D()).getBlock();
 		if (p.getFilter() == null) return modify(p, null);
 		else if (existing.getTypeId() == p.getFilter().getTypeId() && existing.getData() == p.getFilter().getData()) return modify(p, null);
@@ -48,16 +48,16 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			int offset = p.getSize();
 			if (radius > 5) radius = 5;
 			if (offset == -1) offset = 0;
-			Block center = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), offset + 1);
+			Block center = p.getDispenser().getRelative(p.getTail().getOppositeFace(), offset + 1);
 			if(p.getOffset3D() != null) center = p.getOffset3D().getBlock();
 			for (int i = 0 - radius; i <= radius; i++) {
 				for (int j = 0 - radius; j <= radius; j++) {
 					Block set = null;
-					if (p.getTrain() == BlockFace.EAST || p.getTrain() == BlockFace.WEST) {
+					if (p.getTail() == BlockFace.EAST || p.getTail() == BlockFace.WEST) {
 						set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.SOUTH, j);
-					} else if (p.getTrain() == BlockFace.NORTH || p.getTrain() == BlockFace.SOUTH) {
+					} else if (p.getTail() == BlockFace.NORTH || p.getTail() == BlockFace.SOUTH) {
 						set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.EAST, j);
-					} else if (p.getTrain() == BlockFace.UP || p.getTrain() == BlockFace.DOWN) {
+					} else if (p.getTail() == BlockFace.UP || p.getTail() == BlockFace.DOWN) {
 						set = center.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
 					}
 					if (set != null) {
@@ -70,8 +70,8 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			int offset = p.getSize();
 			//System.out.println("l:" + length + " o:" + offset);
 			for (int i = 0; i < length; i++) {
-				Block set = p.getDispenser().getRelative(p.getTrain().getOppositeFace(), i + offset + 2);
-				if(p.getOffset3D() != null) set = p.getOffset3D().getBlock().getRelative(p.getTrain().getOppositeFace(), i);
+				Block set = p.getDispenser().getRelative(p.getTail().getOppositeFace(), i + offset + 2);
+				if(p.getOffset3D() != null) set = p.getOffset3D().getBlock().getRelative(p.getTail().getOppositeFace(), i);
 				actualSetBlock(d, set, newID, newData, applyPhysics, p);
 			}
 		} else actualSetBlock(d, existing, newID, newData, applyPhysics, p);

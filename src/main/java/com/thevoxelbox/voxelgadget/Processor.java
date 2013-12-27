@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 public class Processor {
 
 	final Map<Integer, ModifierType> config;
-	public final BlockFace[] faces = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
+	public final static BlockFace[] FACES = {BlockFace.DOWN, BlockFace.UP, BlockFace.NORTH, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH};
 	private final VoxelGadget gadget;
 	private int offset = 1;
 	private int size = 0;
@@ -36,7 +36,7 @@ public class Processor {
 	private Block filter = null;
 	private Block dispenser;
 	private ModifierType mode;
-	private BlockFace train = null;
+	private BlockFace tail = null;
 	private boolean applyPhysics = true;
 	private int current = 0;
 	private boolean check = false;
@@ -55,49 +55,46 @@ public class Processor {
 	 * Does the heavy lifting when a Dispenser is triggered
 	 *
 	 * @param dispenser The block of the Dispenser that was fired
+	 * @param tail The tail direction of the Gadget.
 	 * @param dispensed The block dispensed by the Gadget.
 	 * @param initial Should always be true if called from outside of this method. Used for Timer Modifiers.
 	 * @return true if the block was actually a Gadget
 	 */
-	public boolean process(final Block dispenser, final ItemStack dispensed, final boolean initial) {
+	public boolean process(final Block dispenser, final BlockFace tail, final ItemStack dispensed, final boolean initial) {
 		if (!initial && !isCheckEnabled()) {
 			getMode().callModeModify(this);
 			return true;
 		}
 		this.dispenser = dispenser;
 		this.setDispensed(dispensed);
-		for (BlockFace face : faces) {
-			Block possibleModeBlock = dispenser.getRelative(face);
-			ComboBlock possibleModeCombo = new ComboBlock(possibleModeBlock.getTypeId(), possibleModeBlock.getData());
-			ModifierType mode_ = getModifierFromConfig(possibleModeCombo);
-			if (mode_ != null && mode_.getType() == ModifierType.Type.MODE) {
-				this.setMode(mode_);
-				this.train = face;
-				break;
-			}
+		Block possibleModeBlock = dispenser.getRelative(tail);
+		ModifierType mode_ = getModifierFromConfig(new ComboBlock(possibleModeBlock));
+		if (mode_ != null && mode_.getType() == ModifierType.Type.MODE) {
+			this.setMode(mode_);
+			this.tail = tail;
 		}
-		if (getTrain() == null) {
+		if (this.tail == null) {
 			return false;
 		}
 		for (current = 2; current < 64; current++) {
-			Block b = dispenser.getRelative(getTrain(), current);
+			Block b = dispenser.getRelative(getTail(), current);
 			ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
 			if (modifier == null) {
 				break;
 			} else if (modifier.getType() == ModifierType.Type.CHECK) {
 				checkLater.add(modifier);
-				Block behind = dispenser.getRelative(getTrain(), current + 1);
+				Block behind = dispenser.getRelative(getTail(), current + 1);
 				if (behind.getState() instanceof InventoryHolder) {
 					this.setInvOverride(((InventoryHolder) behind.getState()).getInventory());
 					current++;
 				}
 			} else {
-				int skip = modifier.callModify(this, dispenser.getRelative(getTrain(), current + 1));
+				int skip = modifier.callModify(this, dispenser.getRelative(getTail(), current + 1));
 				current += skip;
 			}
 		}
 		for (ModifierType modifier : checkLater) {
-			modifier.callModify(this, dispenser.getRelative(getTrain(), current + 1));
+			modifier.callModify(this, dispenser.getRelative(getTail(), current + 1));
 		}
 		if (initial && isTimerEnabled()) {
 			final Processor owner = this;
@@ -111,9 +108,9 @@ public class Processor {
 				@Override
 				public void run() {
 					if (!owner.isCheckEnabled()) {
-						owner.process(dispenser, dispensed, false);
+						owner.process(dispenser, getTail(), dispensed, false);
 					} else {
-						(new Processor(config, gadget)).process(dispenser, dispensed, false);
+						(new Processor(config, gadget)).process(dispenser, getTail(), dispensed, false);
 					}
 					inProgressTimers.remove(gadgetLoc);
 				}
@@ -121,12 +118,12 @@ public class Processor {
 			inProgressTimers.put(gadgetLoc, delayID);
 		}
 		if (checkEnabled) {
-			final Block lastModifierBlock = dispenser.getRelative(train, getCurrent() - 1);
+			final Block lastModifierBlock = dispenser.getRelative(this.tail, getCurrent() - 1);
 			ModifierType lastModifier = getModifierFromConfig(new ComboBlock(lastModifierBlock));
 			boolean doRedstoneBlock = true;
 			if (check && lastModifier == ModifierType.PATCH) {
-				for (BlockFace face : faces) {
-					if (face != train.getOppositeFace()) {
+				for (BlockFace face : FACES) {
+					if (face != this.tail.getOppositeFace()) {
 						Block possibleGadget = lastModifierBlock.getRelative(face);
 						if (possibleGadget.getState() instanceof Dispenser) {
 							Dispenser disp = (Dispenser) possibleGadget.getState();
@@ -140,8 +137,12 @@ public class Processor {
 							}
 							if (itemsList.size() > 0) {
 								ItemStack random = itemsList.get((new Random()).nextInt(itemsList.size()));
-								boolean wasAGadget = (new Processor(config, gadget)).process(disp.getBlock(), random, true);
-								if (wasAGadget && face == train) {
+								boolean wasAGadget = false;
+								for(BlockFace possibleTail : FACES){
+									boolean isATail = (new Processor(config, gadget)).process(disp.getBlock(), possibleTail, random, true);
+									wasAGadget = isATail || wasAGadget;
+								}
+								if (wasAGadget && face == this.tail) {
 									doRedstoneBlock = false;
 								}
 							}
@@ -149,16 +150,16 @@ public class Processor {
 					}
 				}
 			} else if (lastModifier == ModifierType.PATCH) {
-				Block possibleDispenser = dispenser.getRelative(train, getCurrent());
+				Block possibleDispenser = dispenser.getRelative(this.tail, getCurrent());
 				if (possibleDispenser.getType() == Material.DISPENSER) {
-					ModifierType possibleMode = getModifierFromConfig(new ComboBlock(dispenser.getRelative(train, getCurrent() + 1)));
+					ModifierType possibleMode = getModifierFromConfig(new ComboBlock(dispenser.getRelative(this.tail, getCurrent() + 1)));
 					if (possibleMode != null && possibleMode.getType() == ModifierType.Type.MODE) {
 						doRedstoneBlock = false;
 					}
 				}
 			}
 			if (doRedstoneBlock) {
-				final Block last = dispenser.getRelative(train, getCurrent());
+				final Block last = dispenser.getRelative(this.tail, getCurrent());
 				last.setType((check ? Material.REDSTONE_BLOCK : Material.GLASS));
 				last.setData((byte) 0);
 				if (getMode() == ModifierType.TOGGLE) {
@@ -379,8 +380,8 @@ public class Processor {
 	/**
 	 * @return the BlockFace/Direction of the dispenser's train
 	 */
-	public BlockFace getTrain() {
-		return train;
+	public BlockFace getTail() {
+		return tail;
 	}
 
 	/**

@@ -7,3 +7,4 @@ description: ${project.description}
 commands:
   gadget:
     description: The main command for use with VoxelGadget2.
+    aliases: g

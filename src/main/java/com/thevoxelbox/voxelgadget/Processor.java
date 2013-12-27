@@ -3,6 +3,7 @@ package com.thevoxelbox.voxelgadget;
 import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import org.bukkit.Bukkit;
@@ -27,6 +28,7 @@ public class Processor {
 	private boolean areaEnabled = false;
 	private boolean lineEnabled = false;
 	private boolean timerEnabled = false;
+	private boolean triggerExtendsTimer = false;
 	private boolean skipFirstWithTimer = false;
 	private ItemStack dispensedItem;
 	private Block override = null;
@@ -45,10 +47,13 @@ public class Processor {
 		this.config = config;
 		this.gadget = gadget;
 	}
-	private final ArrayList<ModifierType> checkLater = new ArrayList<ModifierType>();
+
+	private final ArrayList<ModifierType> checkLater = new ArrayList<>();
+	private static final HashMap<Location, Integer> inProgressTimers = new HashMap<>();
 
 	/**
 	 * Does the heavy lifting when a Dispenser is triggered
+	 *
 	 * @param dispenser The block of the Dispenser that was fired
 	 * @param dispensed The block dispensed by the Gadget.
 	 * @param initial Should always be true if called from outside of this method. Used for Timer Modifiers.
@@ -96,15 +101,24 @@ public class Processor {
 		}
 		if (initial && isTimerEnabled()) {
 			final Processor owner = this;
-			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
+			final Location gadgetLoc = dispenser.getLocation();
+			if (triggerExtendsTimer && inProgressTimers.containsKey(gadgetLoc)) {
+				int previousDelay = inProgressTimers.get(gadgetLoc);
+				Bukkit.getServer().getScheduler().cancelTask(previousDelay);
+				this.skipFirstWithTimer = true;
+			}
+			int delayID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
+				@Override
 				public void run() {
 					if (!owner.isCheckEnabled()) {
 						owner.process(dispenser, dispensed, false);
 					} else {
 						(new Processor(config, gadget)).process(dispenser, dispensed, false);
 					}
+					inProgressTimers.remove(gadgetLoc);
 				}
 			}, getDelay());
+			inProgressTimers.put(gadgetLoc, delayID);
 		}
 		if (checkEnabled) {
 			final Block lastModifierBlock = dispenser.getRelative(train, getCurrent() - 1);
@@ -117,7 +131,7 @@ public class Processor {
 						if (possibleGadget.getState() instanceof Dispenser) {
 							Dispenser disp = (Dispenser) possibleGadget.getState();
 							//get a random item from the dispenser to simulate it being triggered
-							ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>();
+							ArrayList<ItemStack> itemsList = new ArrayList<>();
 							for (int i = 0; i < 9; i++) {
 								ItemStack item = disp.getInventory().getItem(i);
 								if (item != null && item.getTypeId() != 0) {
@@ -138,7 +152,7 @@ public class Processor {
 				Block possibleDispenser = dispenser.getRelative(train, getCurrent());
 				if (possibleDispenser.getType() == Material.DISPENSER) {
 					ModifierType possibleMode = getModifierFromConfig(new ComboBlock(dispenser.getRelative(train, getCurrent() + 1)));
-					if(possibleMode != null && possibleMode.getType() == ModifierType.Type.MODE){
+					if (possibleMode != null && possibleMode.getType() == ModifierType.Type.MODE) {
 						doRedstoneBlock = false;
 					}
 				}
@@ -149,6 +163,7 @@ public class Processor {
 				last.setData((byte) 0);
 				if (getMode() == ModifierType.TOGGLE) {
 					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
+						@Override
 						public void run() {
 							last.setType(Material.GLASS);
 						}
@@ -164,6 +179,7 @@ public class Processor {
 
 	/**
 	 * Gets the ModifierType of a given block based on the user's configuration
+	 *
 	 * @param block The block in question
 	 * @return The ModifierType of the given block. Null if the block is not a modifier.
 	 */
@@ -173,7 +189,8 @@ public class Processor {
 
 	/**
 	 * Processes offset modifiers. Will add to a value based on where in the tail the modifier was.
-	 * @param add 
+	 *
+	 * @param add
 	 */
 	public void addOffset(int add) {
 		if (isTimerEnabled()) {
@@ -445,5 +462,19 @@ public class Processor {
 	 */
 	public void setWillSkipFirst(boolean skipFirstWithTimer) {
 		this.skipFirstWithTimer = skipFirstWithTimer;
+	}
+
+	/**
+	 * @return the triggerExtendsTimers
+	 */
+	public boolean willExtendInProgressTimer() {
+		return triggerExtendsTimer;
+	}
+
+	/**
+	 * @param triggerExtendsTimers the triggerExtendsTimers to set
+	 */
+	public void setTriggerExtendsTimer(boolean triggerExtendsTimers) {
+		this.triggerExtendsTimer = triggerExtendsTimers;
 	}
 }

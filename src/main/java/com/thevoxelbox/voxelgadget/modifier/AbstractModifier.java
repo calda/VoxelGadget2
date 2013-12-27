@@ -8,7 +8,8 @@ public abstract class AbstractModifier {
     /**
      * Modifies the Processor based on the Modifier's design
      * @param p the Processor to modify
-     * @return true if successful
+	 * @param nextBlock the following block in the tail of the Gadget
+     * @return The number of blocks that should be skipped in the tail of the Gadget
      */
     public abstract int modify(Processor p, Block nextBlock);
 

@@ -1,14 +1,18 @@
-
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.block.Block;
 
-public class SkipModifier extends AbstractModifier{
+public class SkipModifier extends AbstractModifier {
 
 	@Override
 	public int modify(Processor p, Block nextBlock) {
-		return 1;
+		if (p.isTimerEnabled()) {
+			p.setWillSkipFirst(true);
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 
 }

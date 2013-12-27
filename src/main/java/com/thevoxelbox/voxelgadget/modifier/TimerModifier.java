@@ -9,7 +9,7 @@ public class TimerModifier extends AbstractModifier {
 	@Override
 	public int modify(Processor p, Block nextBlock) {
 		if (p.isTimerEnabled()) {
-			p.setWillSkipFirst(true);
+			p.setTriggerExtendsTimer(true);
 		} else {
 			p.setTimerEnabled(true);
 		}

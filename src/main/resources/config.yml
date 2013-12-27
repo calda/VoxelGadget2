@@ -1,6 +1,6 @@
 #Keeps track of what version your config is in case a new
 #modifier is released and needs to be added to your config.
-CONFIG_VERSION: 5
+CONFIG_VERSION: 6
 AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE: true
 
 #Remove or comment out line to remove a modifier from Gadget
@@ -33,6 +33,7 @@ SUBTRACT5: "35:15"
 DECODER: "159:5"
 GET_INVENTORY: "159:3"
 SET_INVENTORY: "159:13"
+GET_BLOCK: "159:8"
 INVERT_CHECK: "159:14"
 CHECK_EQUALS_EXACT: "159:12"
 CHECK_EQUALS: "159:7"

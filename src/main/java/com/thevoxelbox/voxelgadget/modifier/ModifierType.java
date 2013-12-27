@@ -29,6 +29,7 @@ public enum ModifierType {
 	DECODER(new DecoderModifier(), Type.SPECIAL, new ComboBlock(Material.STAINED_CLAY, (byte) 5)),
 	SET_INVENTORY(new SetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 13)),
 	GET_INVENTORY(new GetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 3)),
+	GET_BLOCK(new GetBlockModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 8)),
 	INVERT_CHECK(new InvertCheckModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 14)),
 	CHECK_PLAYER(new CheckPlayerModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 10)),
 	CHECK_LESS(new CheckLessModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 2)),

@@ -4,11 +4,13 @@ import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dispenser;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -45,13 +47,20 @@ public class Processor {
 	}
 	private final ArrayList<ModifierType> checkLater = new ArrayList<ModifierType>();
 
-	public boolean process(final Block dispenser, final ItemStack block, final boolean initial) {
+	/**
+	 * Does the heavy lifting when a Dispenser is triggered
+	 * @param dispenser The block of the Dispenser that was fired
+	 * @param dispensed The block dispensed by the Gadget.
+	 * @param initial Should always be true if called from outside of this method. Used for Timer Modifiers.
+	 * @return true if the block was actually a Gadget
+	 */
+	public boolean process(final Block dispenser, final ItemStack dispensed, final boolean initial) {
 		if (!initial && !isCheckEnabled()) {
 			getMode().callModeModify(this);
 			return true;
 		}
 		this.dispenser = dispenser;
-		this.setDispensed(block);
+		this.setDispensed(dispensed);
 		for (BlockFace face : faces) {
 			Block possibleModeBlock = dispenser.getRelative(face);
 			ComboBlock possibleModeCombo = new ComboBlock(possibleModeBlock.getTypeId(), possibleModeBlock.getData());
@@ -90,23 +99,61 @@ public class Processor {
 			Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
 				public void run() {
 					if (!owner.isCheckEnabled()) {
-						owner.process(dispenser, block, false);
+						owner.process(dispenser, dispensed, false);
 					} else {
-						(new Processor(config, gadget)).process(dispenser, block, false);
+						(new Processor(config, gadget)).process(dispenser, dispensed, false);
 					}
 				}
 			}, getDelay());
 		}
 		if (checkEnabled) {
-			final Block last = dispenser.getRelative(train, getCurrent());
-			last.setType((check ? Material.REDSTONE_BLOCK : Material.GLASS));
-			last.setData((byte) 0);
-			if (getMode() == ModifierType.TOGGLE) {
-				Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
-					public void run() {
-						last.setType(Material.GLASS);
+			final Block lastModifierBlock = dispenser.getRelative(train, getCurrent() - 1);
+			ModifierType lastModifier = getModifierFromConfig(new ComboBlock(lastModifierBlock));
+			boolean doRedstoneBlock = true;
+			if (check && lastModifier == ModifierType.PATCH) {
+				for (BlockFace face : faces) {
+					if (face != train.getOppositeFace()) {
+						Block possibleGadget = lastModifierBlock.getRelative(face);
+						if (possibleGadget.getState() instanceof Dispenser) {
+							Dispenser disp = (Dispenser) possibleGadget.getState();
+							//get a random item from the dispenser to simulate it being triggered
+							ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>();
+							for (int i = 0; i < 9; i++) {
+								ItemStack item = disp.getInventory().getItem(i);
+								if (item != null && item.getTypeId() != 0) {
+									itemsList.add(item);
+								}
+							}
+							if (itemsList.size() > 0) {
+								ItemStack random = itemsList.get((new Random()).nextInt(itemsList.size()));
+								boolean wasAGadget = (new Processor(config, gadget)).process(disp.getBlock(), random, true);
+								if (wasAGadget && face == train) {
+									doRedstoneBlock = false;
+								}
+							}
+						}
 					}
-				}, 2);
+				}
+			} else if (lastModifier == ModifierType.PATCH) {
+				Block possibleDispenser = dispenser.getRelative(train, getCurrent());
+				if (possibleDispenser.getType() == Material.DISPENSER) {
+					ModifierType possibleMode = getModifierFromConfig(new ComboBlock(dispenser.getRelative(train, getCurrent() + 1)));
+					if(possibleMode != null && possibleMode.getType() == ModifierType.Type.MODE){
+						doRedstoneBlock = false;
+					}
+				}
+			}
+			if (doRedstoneBlock) {
+				final Block last = dispenser.getRelative(train, getCurrent());
+				last.setType((check ? Material.REDSTONE_BLOCK : Material.GLASS));
+				last.setData((byte) 0);
+				if (getMode() == ModifierType.TOGGLE) {
+					Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(getGadget(), new Runnable() {
+						public void run() {
+							last.setType(Material.GLASS);
+						}
+					}, 2);
+				}
 			}
 			return true;
 		} else {
@@ -115,10 +162,19 @@ public class Processor {
 		}
 	}
 
+	/**
+	 * Gets the ModifierType of a given block based on the user's configuration
+	 * @param block The block in question
+	 * @return The ModifierType of the given block. Null if the block is not a modifier.
+	 */
 	public ModifierType getModifierFromConfig(ComboBlock block) {
 		return config.get(((block.getID() << 8) | block.getData()));
 	}
 
+	/**
+	 * Processes offset modifiers. Will add to a value based on where in the tail the modifier was.
+	 * @param add 
+	 */
 	public void addOffset(int add) {
 		if (isTimerEnabled()) {
 			setDelay(getDelay() + add * 2);

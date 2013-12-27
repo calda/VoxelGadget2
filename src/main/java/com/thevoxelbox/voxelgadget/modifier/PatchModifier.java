@@ -4,6 +4,7 @@ import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dispenser;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
@@ -12,6 +13,16 @@ public class PatchModifier extends AbstractModifier {
 	@Override
 	public int modify(Processor p, Block behind) {
 		if (behind.getState() instanceof InventoryHolder) {
+			if (behind.getState() instanceof Dispenser) {
+				for (BlockFace face : p.faces) {
+					if (p.getModifierFromConfig(new ComboBlock(behind.getRelative(face))) == ModifierType.PATCH) {
+						ModifierType behindDispenser = p.getModifierFromConfig(new ComboBlock(behind.getRelative(face.getOppositeFace())));
+						if (behindDispenser != null && behindDispenser.getType() == ModifierType.Type.MODE) {
+							return 0;
+						}
+					}
+				}
+			}
 			Inventory iBehind = ((InventoryHolder) behind.getState()).getInventory();
 			try {
 				int offx = (iBehind.getItem(0) == null ? 0 : iBehind.getItem(0).getAmount() - 32);

@@ -22,10 +22,7 @@ public class GetBlockModifier extends AbstractModeModifier {
 
     @Override
     public int modeModify(Processor p) {
-        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
-        if (p.getOffset3D() != null) {
-            existing = p.getOffset3D().getBlock();
-		}
+        Block existing = p.getTargetBlock();
 		final Inventory inv = ((p.getInvOverride() == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : p.getInvOverride());
 		inv.clear();
 		if(existing.getType() != Material.AIR) inv.addItem(new ItemStack(existing.getType(), 1, existing.getData()));

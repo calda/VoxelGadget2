@@ -27,6 +27,8 @@ public enum ModifierType {
 	SUBTRACT1(new OffsetModifier(-1), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 5)),
 	SUBTRACT5(new OffsetModifier(-5), Type.OFFSET, new ComboBlock(Material.WOOL, (byte) 15)),
 	DECODER(new DecoderModifier(), Type.SPECIAL, new ComboBlock(Material.STAINED_CLAY, (byte) 5)),
+	RANDOM_NUMBER(new RandomNumberModifier(), Type.SPECIAL, new ComboBlock(Material.STAINED_CLAY, (byte) 4)),
+	RANDOM_BLOCK(new RandomBlockModifier(), Type.SPECIAL, new ComboBlock(Material.STAINED_CLAY, (byte) 0)),
 	SET_INVENTORY(new SetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 13)),
 	GET_INVENTORY(new GetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 3)),
 	GET_BLOCK(new GetBlockModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 8)),

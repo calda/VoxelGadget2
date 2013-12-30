@@ -2,6 +2,7 @@ package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 public class BlockRemoveMode extends AbstractModeModifier {
 
@@ -13,7 +14,7 @@ public class BlockRemoveMode extends AbstractModeModifier {
 		}
         Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
 		if(p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
-        setBlock(existing, 0, (byte) 0, p.applyPhysics(), p);
+        setBlock(existing, new ItemStack(0, p.getDispensed().getAmount(), (byte) 0), p.applyPhysics(), p);
         return 0;
     }
 

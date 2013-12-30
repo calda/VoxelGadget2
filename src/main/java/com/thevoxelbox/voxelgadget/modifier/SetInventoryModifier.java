@@ -20,10 +20,7 @@ public class SetInventoryModifier extends AbstractModeModifier {
 
     @Override
     public int modeModify(Processor p) {
-        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
-        if (p.getOffset3D() != null) {
-            existing = p.getOffset3D().getBlock();
-        }
+        Block existing =p.getTargetBlock();
         if (existing.getState() instanceof InventoryHolder) {
             Inventory target = ((InventoryHolder) existing.getState()).getInventory();
             Inventory disp = ((p.getInvOverride() == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : p.getInvOverride());

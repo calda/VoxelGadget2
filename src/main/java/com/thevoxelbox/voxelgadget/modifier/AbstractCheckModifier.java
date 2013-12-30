@@ -11,10 +11,7 @@ public abstract class AbstractCheckModifier extends AbstractModifier {
 
     @Override
     public int modify(Processor p, Block nextBlock) {
-        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
-        if (p.getOffset3D() != null) {
-            existing = p.getOffset3D().getBlock();
-        }
+        Block existing = p.getTargetBlock();
         if (!(existing.getState() instanceof InventoryHolder)) {
             try {
                 p.setCheck(runCheck(null, null, p.getDispensed(), existing, p.getInvOverride() != null) || p.getCheck());

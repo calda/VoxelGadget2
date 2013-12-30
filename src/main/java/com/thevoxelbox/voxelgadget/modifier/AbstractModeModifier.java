@@ -1,10 +1,8 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
-
+import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.Dispenser;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -19,8 +17,7 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 	 * @return true if successful
 	 */
 	public int modeModify(Processor p) {
-		Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
-		if (p.getOffset3D() != null) existing = p.getDispenser().getLocation().add(p.getOffset3D()).getBlock();
+		Block existing = p.getTargetBlock();
 		if (p.getFilter() == null) return modify(p, null);
 		else if (existing.getTypeId() == p.getFilter().getTypeId() && existing.getData() == p.getFilter().getData()) return modify(p, null);
 		else return 0;
@@ -31,67 +28,30 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 	 * Places the block in a chest if there is a chest present.
 	 * Also checks if it can be placed under the Finite modifier.
 	 *
-	 * @param existing the block already in the world to be overriden
-	 * @param newID the ID of the block to be placed
-	 * @param newData the data/ink of the block to be placed
+	 * @param existing the block already in the world to be overridden
+	 * @param dispensed the block dispensed by the dispenser
 	 * @param applyPhysics if Physics should be applied on the placing/removing
 	 * @param p the Processor that called the Mode Modifier to be triggered
 	 */
-	protected void setBlock(Block existing, int newID, byte newData, boolean applyPhysics, Processor p) {
-		Dispenser d = (Dispenser) p.getDispenser().getState();
-		if (newID == 46 && (p.getOverride() == null || p.getOverride().getTypeId() != 46)) { //tnt; not overriden
+	protected void setBlock(Block existing, ItemStack dispensed, boolean applyPhysics, Processor p) {
+		if (dispensed.getType() == Material.TNT && (p.getOverride() == null || p.getOverride().getType() == Material.TNT)) { //tnt; not overriden
 			existing.getWorld().spawnEntity(existing.getLocation(), EntityType.PRIMED_TNT);
 			return;
 		}
-		if (p.isAreaEnabled()) {
-			int radius = p.getOffset() - 1;
-			int offset = p.getSize();
-			if (radius > 5) radius = 5;
-			if (offset == -1) offset = 0;
-			Block center = p.getDispenser().getRelative(p.getTail().getOppositeFace(), offset + 1);
-			if(p.getOffset3D() != null) center = p.getOffset3D().getBlock();
-			for (int i = 0 - radius; i <= radius; i++) {
-				for (int j = 0 - radius; j <= radius; j++) {
-					Block set = null;
-					if (p.getTail() == BlockFace.EAST || p.getTail() == BlockFace.WEST) {
-						set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.SOUTH, j);
-					} else if (p.getTail() == BlockFace.NORTH || p.getTail() == BlockFace.SOUTH) {
-						set = center.getRelative(BlockFace.UP, i).getRelative(BlockFace.EAST, j);
-					} else if (p.getTail() == BlockFace.UP || p.getTail() == BlockFace.DOWN) {
-						set = center.getRelative(BlockFace.SOUTH, i).getRelative(BlockFace.EAST, j);
-					}
-					if (set != null) {
-						actualSetBlock(d, set, newID, newData, applyPhysics, p);
-					}
-				}
-			}
-		} else if (p.isLineEnabled()) {
-			int length = p.getOffset() - 1;
-			int offset = p.getSize();
-			//System.out.println("l:" + length + " o:" + offset);
-			for (int i = 0; i < length; i++) {
-				Block set = p.getDispenser().getRelative(p.getTail().getOppositeFace(), i + offset + 2);
-				if(p.getOffset3D() != null) set = p.getOffset3D().getBlock().getRelative(p.getTail().getOppositeFace(), i);
-				actualSetBlock(d, set, newID, newData, applyPhysics, p);
-			}
-		} else actualSetBlock(d, existing, newID, newData, applyPhysics, p);
+		if (p.isAreaEnabled()) AreaModifier.create(p, this, dispensed);
+		else if (p.isLineEnabled()) LineModifier.create(p, this, dispensed);
+		else actualSetBlock(existing, dispensed, applyPhysics, p);
 	}
 
-	private void actualSetBlock(Dispenser d, Block existing, int newID, byte newData, boolean applyPhysics, Processor p) {
+	protected void actualSetBlock(Block existing, ItemStack dispensed, boolean applyPhysics, Processor p) {
+		int newID = dispensed.getTypeId();
+		byte newData = dispensed.getData().getData();
 		if (existing.getState() instanceof InventoryHolder) {
-			InventoryHolder invBlock = (InventoryHolder) existing.getState();
-			Inventory i = invBlock.getInventory();
-			//if (i.firstEmpty() != -1) i.addItem(new ItemStack(newID, 1, newData));
-			int amount = 0;
-			for (ItemStack is : d.getInventory().getContents()) {
-				if (is != null && is.getTypeId() == p.getDispensed().getTypeId() && is.getData().getData() == p.getDispensed().getData().getData()) {
-					amount += is.getAmount() + 1;
-				}
-			}
+			Inventory inv = ((InventoryHolder) existing.getState()).getInventory();
 			if (newID == 0) {
-				i.removeItem(new ItemStack(p.getDispensed().getTypeId(), amount, p.getDispensed().getData().getData()));
+				inv.removeItem(new ItemStack(p.getDispensed().getTypeId(), dispensed.getAmount(), p.getDispensed().getData().getData()));
 			} else {
-				i.addItem(new ItemStack(newID, amount, newData));
+				inv.addItem(new ItemStack(newID, dispensed.getAmount(), newData));
 			}
 		} else {
 			existing.setTypeId(newID, applyPhysics);

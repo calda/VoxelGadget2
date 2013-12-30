@@ -76,6 +76,13 @@ public class Processor {
 		if (this.tail == null) {
 			return false;
 		}
+		int amount = 0;
+		for (ItemStack is : ((Dispenser) dispenser.getState()).getInventory().getContents()) {
+			if (is != null && is.getTypeId() == getDispensed().getTypeId() && is.getData().getData() == getDispensed().getData().getData()) {
+				amount += is.getAmount() + 1;
+			}
+		}
+		getDispensed().setAmount(Math.min(amount, 64));
 		for (current = 2; current < 64; current++) {
 			Block b = dispenser.getRelative(getTail(), current);
 			ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
@@ -138,7 +145,7 @@ public class Processor {
 							if (itemsList.size() > 0) {
 								ItemStack random = itemsList.get((new Random()).nextInt(itemsList.size()));
 								boolean wasAGadget = false;
-								for(BlockFace possibleTail : FACES){
+								for (BlockFace possibleTail : FACES) {
 									boolean isATail = (new Processor(config, gadget)).process(disp.getBlock(), possibleTail, random, true);
 									wasAGadget = isATail || wasAGadget;
 								}
@@ -186,6 +193,21 @@ public class Processor {
 	 */
 	public ModifierType getModifierFromConfig(ComboBlock block) {
 		return config.get(((block.getID() << 8) | block.getData()));
+	}
+
+	/**
+	 * @return the target block of the Gadget, be it with a 3D Offset or not.
+	 */
+	public Block getTargetBlock() {
+		if (getOffset3D() == null) return getDispenser().getRelative(getTail().getOppositeFace(), getOffset());
+		else return getOffset3D().getBlock();
+	}
+
+	/**
+	 * @return the target location of the Gadget, be it with a 3D Offset or not.
+	 */
+	public Location getTargetLocation() {
+		return getTargetBlock().getLocation();
 	}
 
 	/**
@@ -398,9 +420,6 @@ public class Processor {
 		this.applyPhysics = applyPhysics;
 	}
 
-	/**
-	 * @return the offset3D
-	 */
 	public Location getOffset3D() {
 		return offset3D;
 	}
@@ -413,14 +432,14 @@ public class Processor {
 	}
 
 	/**
-	 * @return the current offset from the dispenser
+	 * @return the current offset from the dispenser in the main loop
 	 */
 	public int getCurrent() {
 		return current;
 	}
 
 	/**
-	 * @return the check
+	 * @return the current value of the dispenser's check modifiers
 	 */
 	public boolean getCheck() {
 		return check;

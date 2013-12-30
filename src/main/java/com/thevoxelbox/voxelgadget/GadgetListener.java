@@ -20,7 +20,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class GadgetListener implements Listener {
 	
 	final VoxelGadget gadget;
-	final TreeMap<Integer, ModifierType> config = new TreeMap<Integer, ModifierType>();
+	final TreeMap<Integer, ModifierType> config = new TreeMap<>();
 	
 	public GadgetListener(VoxelGadget gadget) {
 		this.gadget = gadget;
@@ -58,7 +58,7 @@ public class GadgetListener implements Listener {
 		}
 	}
 	
-	final private int CONFIG_VERSION = 6; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
+	final private int CONFIG_VERSION = 8; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
 
 	/**
 	 * Loads the configuration for VoxelGadget2.
@@ -92,7 +92,7 @@ public class GadgetListener implements Listener {
 			//if the config is out of date, update but preserve old values
 			if (gadget.getConfig().getInt("CONFIG_VERSION") != CONFIG_VERSION) {
 				if (gadget.getConfig().getBoolean("AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE")) {
-					final HashMap<ModifierType, String> previousValues = new HashMap<ModifierType, String>();
+					final HashMap<ModifierType, String> previousValues = new HashMap<>();
 					for (ModifierType type : ModifierType.values()) {
 						String previous = gadget.getConfig().getString(type.toString());
 						if (previous != null) {

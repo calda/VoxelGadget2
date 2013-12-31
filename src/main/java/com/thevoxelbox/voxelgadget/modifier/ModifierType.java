@@ -61,8 +61,8 @@ public enum ModifierType {
 	 * @param p the Processor that called the method
 	 * @return true if the modifications were successful
 	 */
-	public int callModify(Processor p, Block nextBlock) {
-		if (modifier != null) return modifier.modify(p, nextBlock);
+	public int callModify(Processor p, Block currentBlock, Block nextBlock) {
+		if (modifier != null) return modifier.modify(p, currentBlock, nextBlock);
 		return 0;
 	}
 

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 public class LineModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block nextBlock) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		p.setAreaEnabled(false);
 		p.setLineEnabled(true);
 		return 0;

@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 class CheckPlayerModifier extends AbstractCheckModifier {
 
     @Override
-    public int modify(Processor p, Block nextBlock) {
+    public int modify(Processor p, Block currentBlock, Block nextBlock) {
         Block existing = p.getTargetBlock();
         if (p.isAreaEnabled()) {
             Vector v = new Vector(existing.getX(), existing.getY(), existing.getZ());

@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 public class SkipModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block nextBlock) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (p.isTimerEnabled()) {
 			p.setWillSkipFirst(true);
 			return 0;

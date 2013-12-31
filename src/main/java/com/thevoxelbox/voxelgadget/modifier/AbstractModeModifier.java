@@ -18,8 +18,8 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 	 */
 	public int modeModify(Processor p) {
 		Block existing = p.getTargetBlock();
-		if (p.getFilter() == null) return modify(p, null);
-		else if (existing.getTypeId() == p.getFilter().getTypeId() && existing.getData() == p.getFilter().getData()) return modify(p, null);
+		if (p.getFilter() == null) return modify(p, null, null);
+		else if (existing.getTypeId() == p.getFilter().getTypeId() && existing.getData() == p.getFilter().getData()) return modify(p, null, null);
 		else return 0;
 	}
 

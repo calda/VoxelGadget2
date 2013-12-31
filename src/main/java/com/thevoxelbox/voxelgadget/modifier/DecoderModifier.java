@@ -13,9 +13,9 @@ import org.bukkit.inventory.ItemStack;
 public class DecoderModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block behind) {
-		if (behind.getState() instanceof InventoryHolder) {
-			Inventory iBehind = ((InventoryHolder) behind.getState()).getInventory();
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
+		if (nextBlock.getState() instanceof InventoryHolder) {
+			Inventory iBehind = ((InventoryHolder) nextBlock.getState()).getInventory();
 			Inventory dispenser = ((Dispenser) p.getDispenser().getState()).getInventory();
 			ItemStack firstFound = null;
 			for (ItemStack item : dispenser.getContents()) {

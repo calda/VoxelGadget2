@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 public class TimerModifier extends AbstractModifier {
 	
 	@Override
-	public int modify(Processor p, Block nextBlock) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (p.isTimerEnabled()) {
 			p.setTriggerExtendsTimer(true);
 		} else {

@@ -15,7 +15,7 @@ public class OffsetModifier extends AbstractModifier {
     }
 
     @Override
-    public int modify(Processor p, Block nextBlock) {
+    public int modify(Processor p, Block currentBlock, Block nextBlock) {
         p.addOffset(offset);
         if (p.getOffset() > 100) p.setOffset(100);
         else if (p.getOffset() < 1) p.setOffset(1);

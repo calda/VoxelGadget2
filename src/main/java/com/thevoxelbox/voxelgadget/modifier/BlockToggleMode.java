@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 public class BlockToggleMode extends AbstractModeModifier {
 
 	@Override
-	public int modify(Processor p, Block nextBlock) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (p.getDispensed().getTypeId() == 387) { //handle for blueprints
 			BlueprintModifier blueprint = new BlueprintModifier();
 			if (blueprint.checkIfExists(p)) blueprint.remove(p);
@@ -17,7 +17,7 @@ public class BlockToggleMode extends AbstractModeModifier {
 		Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), (p.isLineEnabled()
 				|| p.isAreaEnabled() ? p.getSize() + (p.isLineEnabled() ? 2 : 1) : p.getOffset()));
 		if (p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
-		System.out.println(existing);
+		//System.out.println(existing);
 		if (p.isOverrideAbsolute()) {
 			toggleBetween(existing, p.getDispensed().getTypeId(), p.getDispensed().getData().getData(), p.getOverride().getTypeId(), p.getOverride().getData(), p);
 		} else {
@@ -33,8 +33,8 @@ public class BlockToggleMode extends AbstractModeModifier {
 	}
 	
 	private void toggleBetween(Block existing, int idA, byte dataA, int idB, byte dataB, Processor p){
-		System.out.println("Toggling between " + idA + ":" + dataA + " and " + idB + ":" + dataB);
-		System.out.println("Current = " + existing.getTypeId() + ":" + existing.getData());
+		//System.out.println("Toggling between " + idA + ":" + dataA + " and " + idB + ":" + dataB);
+		//System.out.println("Current = " + existing.getTypeId() + ":" + existing.getData());
 		int placeID;
 		byte placeData;
 		if(existing.getTypeId() == idB && existing.getData() == dataB){
@@ -44,7 +44,7 @@ public class BlockToggleMode extends AbstractModeModifier {
 			placeID = idB;
 			placeData = dataB;
 		}
-		System.out.println("Placing " + placeID + ":" + placeData);
+		//System.out.println("Placing " + placeID + ":" + placeData);
 		this.setBlock(existing, new ItemStack(placeID, p.getDispensed().getAmount() , placeData), p.applyPhysics(), p);
 	}
 	

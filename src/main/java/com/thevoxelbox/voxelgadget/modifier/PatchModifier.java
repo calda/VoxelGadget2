@@ -11,19 +11,19 @@ import org.bukkit.inventory.InventoryHolder;
 public class PatchModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block behind) {
-		if (behind.getState() instanceof InventoryHolder) {
-			if (behind.getState() instanceof Dispenser) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
+		if (nextBlock.getState() instanceof InventoryHolder) {
+			if (nextBlock.getState() instanceof Dispenser) {
 				for (BlockFace face : p.FACES) {
-					if (p.getModifierFromConfig(new ComboBlock(behind.getRelative(face))) == ModifierType.PATCH) {
-						ModifierType behindDispenser = p.getModifierFromConfig(new ComboBlock(behind.getRelative(face.getOppositeFace())));
+					if (p.getModifierFromConfig(new ComboBlock(nextBlock.getRelative(face))) == ModifierType.PATCH) {
+						ModifierType behindDispenser = p.getModifierFromConfig(new ComboBlock(nextBlock.getRelative(face.getOppositeFace())));
 						if (behindDispenser != null && behindDispenser.getType() == ModifierType.Type.MODE) {
 							return 0;
 						}
 					}
 				}
 			}
-			Inventory iBehind = ((InventoryHolder) behind.getState()).getInventory();
+			Inventory iBehind = ((InventoryHolder) nextBlock.getState()).getInventory();
 			try {
 				int offx = (iBehind.getItem(0) == null ? 0 : iBehind.getItem(0).getAmount() - 32);
 				int offy = (iBehind.getItem(1) == null ? 0 : iBehind.getItem(1).getAmount() - 32);
@@ -50,7 +50,7 @@ public class PatchModifier extends AbstractModifier {
 						//System.out.println(modifier);
 						if (modifier == ModifierType.PATCH) return 1;
 						if (modifier.getType() != ModifierType.Type.CHECK) {
-							int skip = modifier.callModify(p, patchStart.getRelative(patchTail, current + 1));
+							int skip = modifier.callModify(p, nextInTail ,patchStart.getRelative(patchTail, current + 1));
 							current += skip;
 						}
 					}

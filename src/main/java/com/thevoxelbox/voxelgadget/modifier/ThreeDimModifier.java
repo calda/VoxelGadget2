@@ -12,9 +12,9 @@ import org.bukkit.inventory.InventoryHolder;
 public class ThreeDimModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block behind) {
-		if (behind.getState() instanceof InventoryHolder) {
-			Inventory iBehind = ((InventoryHolder) behind.getState()).getInventory();
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
+		if (nextBlock.getState() instanceof InventoryHolder) {
+			Inventory iBehind = ((InventoryHolder) nextBlock.getState()).getInventory();
 			try {
 				int offx = (iBehind.getItem(0) == null ? 0 : iBehind.getItem(0).getAmount() - 32);
 				int offy = (iBehind.getItem(1) == null ? 0 : iBehind.getItem(1).getAmount() - 32);

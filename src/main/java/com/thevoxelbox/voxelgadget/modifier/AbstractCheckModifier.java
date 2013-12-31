@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class AbstractCheckModifier extends AbstractModifier {
 
     @Override
-    public int modify(Processor p, Block nextBlock) {
+    public int modify(Processor p, Block currentBlock, Block nextBlock) {
         Block existing = p.getTargetBlock();
         if (!(existing.getState() instanceof InventoryHolder)) {
             try {

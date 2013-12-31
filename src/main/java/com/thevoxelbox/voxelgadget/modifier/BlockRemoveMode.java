@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 public class BlockRemoveMode extends AbstractModeModifier {
 
     @Override
-    public int modify(Processor p, Block nextBlock) {
+    public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (p.getDispensed().getTypeId() == 387) {
 			(new BlueprintModifier()).remove(p);
 			return 0;

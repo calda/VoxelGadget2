@@ -8,7 +8,7 @@ import org.bukkit.block.Block;
 public class InvertCheckModifier extends AbstractModifier{
 
 	@Override
-	public int modify(Processor p, Block nextBlock) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		p.setCheck(!p.getCheck());
 		return 0;
 	}

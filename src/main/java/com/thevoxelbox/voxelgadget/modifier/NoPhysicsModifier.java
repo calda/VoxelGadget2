@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 public class NoPhysicsModifier extends AbstractModifier {
 
     @Override
-    public int modify(Processor p, Block nextBlock) {
+    public int modify(Processor p, Block currentBlock, Block nextBlock) {
         p.setApplyPhysics(false);
         return 0;
     }

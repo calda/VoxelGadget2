@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 class InventoryModifier extends AbstractModifier {
 
     @Override
-    public int modify(Processor p, Block nextBlock) {
+    public int modify(Processor p, Block currentBlock, Block nextBlock) {
         ArrayList<ItemStack> similars = new ArrayList<ItemStack>();
         Block dispenser = p.getDispenser();
         Dispenser disp = (Dispenser) dispenser.getState();

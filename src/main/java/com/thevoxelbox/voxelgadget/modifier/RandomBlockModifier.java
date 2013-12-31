@@ -13,9 +13,9 @@ import org.bukkit.inventory.ItemStack;
 public class RandomBlockModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block behind) {
-		if (behind.getState() instanceof InventoryHolder) {
-			Inventory inv = ((InventoryHolder) behind.getState()).getInventory();
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
+		if (nextBlock.getState() instanceof InventoryHolder) {
+			Inventory inv = ((InventoryHolder) nextBlock.getState()).getInventory();
 			HashMap<ComboBlock, int[]> ranges = new HashMap<>();
 			int currentHigh = 0;
 			for (ItemStack stack : inv) {

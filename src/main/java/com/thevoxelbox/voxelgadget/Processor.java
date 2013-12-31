@@ -5,6 +5,7 @@ import com.thevoxelbox.voxelgadget.modifier.ModifierType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -48,7 +49,7 @@ public class Processor {
 		this.gadget = gadget;
 	}
 
-	private final ArrayList<ModifierType> checkLater = new ArrayList<>();
+	private final HashMap<Block, ModifierType> checkLater = new HashMap<>();
 	private static final HashMap<Location, Integer> inProgressTimers = new HashMap<>();
 
 	/**
@@ -84,24 +85,24 @@ public class Processor {
 		}
 		getDispensed().setAmount(Math.min(amount, 64));
 		for (current = 2; current < 64; current++) {
-			Block b = dispenser.getRelative(getTail(), current);
-			ModifierType modifier = getModifierFromConfig(new ComboBlock(b));
+			Block nextInTail = dispenser.getRelative(getTail(), current);
+			ModifierType modifier = getModifierFromConfig(new ComboBlock(nextInTail));
 			if (modifier == null) {
 				break;
 			} else if (modifier.getType() == ModifierType.Type.CHECK) {
-				checkLater.add(modifier);
+				checkLater.put(nextInTail, modifier);
 				Block behind = dispenser.getRelative(getTail(), current + 1);
 				if (behind.getState() instanceof InventoryHolder) {
 					this.setInvOverride(((InventoryHolder) behind.getState()).getInventory());
 					current++;
 				}
 			} else {
-				int skip = modifier.callModify(this, dispenser.getRelative(getTail(), current + 1));
+				int skip = modifier.callModify(this, nextInTail, dispenser.getRelative(getTail(), current + 1));
 				current += skip;
 			}
 		}
-		for (ModifierType modifier : checkLater) {
-			modifier.callModify(this, dispenser.getRelative(getTail(), current + 1));
+		for (Entry<Block, ModifierType> entry : checkLater.entrySet()) {
+			entry.getValue().callModify(this, entry.getKey(), dispenser.getRelative(getTail(), current + 1));
 		}
 		if (initial && isTimerEnabled()) {
 			final Processor owner = this;

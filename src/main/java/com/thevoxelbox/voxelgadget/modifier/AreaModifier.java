@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public class AreaModifier extends AbstractModifier {
 
 	@Override
-	public int modify(Processor p, Block nextBlock) {
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		p.setAreaEnabled(true);
 		p.setLineEnabled(false);
 		return 0;
@@ -20,6 +20,7 @@ public class AreaModifier extends AbstractModifier {
 		if (radius > 5) radius = 5;
 		if (offset == -1) offset = 0;
 		Block center = p.getDispenser().getRelative(p.getTail().getOppositeFace(), offset + 1);
+		if(p.getOffset3D() != null) center = p.getOffset3D().getBlock();
 		for (int i = 0 - radius; i <= radius; i++) {
 			for (int j = 0 - radius; j <= radius; j++) {
 				Block set = null;

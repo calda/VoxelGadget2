@@ -18,10 +18,10 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class GadgetListener implements Listener {
-	
+
 	final VoxelGadget gadget;
 	final TreeMap<Integer, ModifierType> config = new TreeMap<>();
-	
+
 	public GadgetListener(VoxelGadget gadget) {
 		this.gadget = gadget;
 	}
@@ -33,16 +33,14 @@ public class GadgetListener implements Listener {
 	 */
 	@EventHandler
 	public void onDispenserDispense(BlockDispenseEvent e) {
-		if (e.getItem().getType().isBlock() || e.getItem().getTypeId() == 387) { //block or Blueprint (written book)
-			boolean wasAGadget = false;
-			for (BlockFace face : Processor.FACES) {
-				boolean hadTail = (new Processor(config, gadget).process(e.getBlock(), face, e.getItem(), true));
-				wasAGadget = wasAGadget || hadTail;
-			}
-			e.setCancelled(wasAGadget);
+		boolean wasAGadget = false;
+		for (BlockFace face : Processor.FACES) {
+			boolean hadTail = (new Processor(config, gadget).process(e.getBlock(), face, e.getItem(), true));
+			wasAGadget = wasAGadget || hadTail;
 		}
+		e.setCancelled(wasAGadget);
 	}
-	
+
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		if (e.getMaterial() == Material.BOOK) {
@@ -57,8 +55,8 @@ public class GadgetListener implements Listener {
 			e.setCancelled(true);
 		}
 	}
-	
-	final private int CONFIG_VERSION = 8; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
+
+	final private int CONFIG_VERSION = 9; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
 
 	/**
 	 * Loads the configuration for VoxelGadget2.
@@ -67,6 +65,8 @@ public class GadgetListener implements Listener {
 	public void loadConfig() {
 		File f = new File("plugins/VoxelGadget2/config.yml");
 		if (f.exists()) {
+			int maximumCuboidSize = gadget.getConfig().getInt("MAXIMUM_BLUEPRINT_CUBOID_SIZE");
+			SaveCommand.MAX_CUBOID_SIZE = maximumCuboidSize;
 			for (ModifierType type : ModifierType.values()) {
 				String value = gadget.getConfig().getString(type.toString());
 				String[] split;

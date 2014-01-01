@@ -2,6 +2,7 @@ package com.thevoxelbox.voxelgadget.modifier;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * A combined class to store the ID and data/ink of a block
@@ -47,6 +48,14 @@ public class ComboBlock {
 	
 	public boolean equals(ComboBlock combo){
 		return id == combo.getID() && data == combo.getData();
+	}
+	
+	public boolean equals(Block block){
+		return id == block.getTypeId() && data == block.getData();
+	}
+	
+	public boolean equals(ItemStack stack){
+		return id == stack.getTypeId() && data == stack.getData().getData();
 	}
 
 }

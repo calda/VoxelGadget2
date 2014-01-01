@@ -38,24 +38,29 @@ public abstract class AbstractModeModifier extends AbstractModifier {
 			existing.getWorld().spawnEntity(existing.getLocation(), EntityType.PRIMED_TNT);
 			return;
 		}
+		if (!p.getDispensed().getType().isBlock()) {
+			if (existing.getState() instanceof InventoryHolder) addItemToInventory(existing, dispensed, p);
+			return;
+		}
 		if (p.isAreaEnabled()) AreaModifier.create(p, this, dispensed);
 		else if (p.isLineEnabled()) LineModifier.create(p, this, dispensed);
 		else actualSetBlock(existing, dispensed, applyPhysics, p);
 	}
 
 	protected void actualSetBlock(Block existing, ItemStack dispensed, boolean applyPhysics, Processor p) {
-		int newID = dispensed.getTypeId();
-		byte newData = dispensed.getData().getData();
-		if (existing.getState() instanceof InventoryHolder) {
-			Inventory inv = ((InventoryHolder) existing.getState()).getInventory();
-			if (newID == 0) {
-				inv.removeItem(new ItemStack(p.getDispensed().getTypeId(), dispensed.getAmount(), p.getDispensed().getData().getData()));
-			} else {
-				inv.addItem(new ItemStack(newID, dispensed.getAmount(), newData));
-			}
+		if (existing.getState() instanceof InventoryHolder) addItemToInventory(existing, dispensed, p);
+		else {
+			existing.setTypeId(dispensed.getTypeId(), applyPhysics);
+			existing.setData(dispensed.getData().getData(), applyPhysics);
+		}
+	}
+
+	private void addItemToInventory(Block existing, ItemStack dispensed, Processor p) {
+		Inventory inv = ((InventoryHolder) existing.getState()).getInventory();
+		if (dispensed.getType() == Material.AIR) {
+			inv.removeItem(new ItemStack(p.getDispensed().getTypeId(), dispensed.getAmount(), p.getDispensed().getData().getData()));
 		} else {
-			existing.setTypeId(newID, applyPhysics);
-			existing.setData(newData, applyPhysics);
+			inv.addItem(new ItemStack(dispensed.getTypeId(), dispensed.getAmount(), dispensed.getData().getData()));
 		}
 	}
 

@@ -9,9 +9,13 @@ public class BlockToggleMode extends AbstractModeModifier {
 	@Override
 	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (p.getDispensed().getTypeId() == 387) { //handle for blueprints
-			BlueprintModifier blueprint = new BlueprintModifier();
-			if (blueprint.checkIfExists(p)) blueprint.remove(p);
-			else blueprint.paste(p);
+			try {
+				BlueprintHandler blueprint = new BlueprintHandler(p.getDispensed());
+				if (blueprint.checkIfExists(p.getTargetLocation())) blueprint.remove(p.getTargetLocation());
+				else blueprint.paste(p.getTargetLocation());
+			} catch (Exception e) {
+				BlueprintHandler.handleException(e, p.getDispensed());
+			}
 			return 0;
 		}
 		Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), (p.isLineEnabled()
@@ -23,7 +27,7 @@ public class BlockToggleMode extends AbstractModeModifier {
 		} else {
 			int placeID = p.getDispensed().getTypeId();
 			byte placeData = p.getDispensed().getData().getData();
-			if(p.getOverride() != null){
+			if (p.getOverride() != null) {
 				placeID = p.getOverride().getTypeId();
 				placeData = p.getOverride().getData();
 			}
@@ -31,13 +35,13 @@ public class BlockToggleMode extends AbstractModeModifier {
 		}
 		return 0;
 	}
-	
-	private void toggleBetween(Block existing, int idA, byte dataA, int idB, byte dataB, Processor p){
+
+	private void toggleBetween(Block existing, int idA, byte dataA, int idB, byte dataB, Processor p) {
 		//System.out.println("Toggling between " + idA + ":" + dataA + " and " + idB + ":" + dataB);
 		//System.out.println("Current = " + existing.getTypeId() + ":" + existing.getData());
 		int placeID;
 		byte placeData;
-		if(existing.getTypeId() == idB && existing.getData() == dataB){
+		if (existing.getTypeId() == idB && existing.getData() == dataB) {
 			placeID = idA;
 			placeData = dataA;
 		} else {
@@ -45,7 +49,7 @@ public class BlockToggleMode extends AbstractModeModifier {
 			placeData = dataB;
 		}
 		//System.out.println("Placing " + placeID + ":" + placeData);
-		this.setBlock(existing, new ItemStack(placeID, p.getDispensed().getAmount() , placeData), p.applyPhysics(), p);
+		this.setBlock(existing, new ItemStack(placeID, p.getDispensed().getAmount(), placeData), p.applyPhysics(), p);
 	}
-	
+
 }

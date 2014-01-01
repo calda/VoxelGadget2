@@ -6,16 +6,20 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockRemoveMode extends AbstractModeModifier {
 
-    @Override
-    public int modify(Processor p, Block currentBlock, Block nextBlock) {
+	@Override
+	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (p.getDispensed().getTypeId() == 387) {
-			(new BlueprintModifier()).remove(p);
-			return 0;
+			try {
+				BlueprintHandler blueprint = new BlueprintHandler(p.getDispensed());
+				blueprint.remove(p.getTargetLocation());
+			} catch (Exception e) {
+				BlueprintHandler.handleException(e, p.getDispensed());
+			}
 		}
-        Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
-		if(p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
-        setBlock(existing, new ItemStack(0, p.getDispensed().getAmount(), (byte) 0), p.applyPhysics(), p);
-        return 0;
-    }
+		Block existing = p.getDispenser().getRelative(p.getTail().getOppositeFace(), p.getOffset());
+		if (p.getOffset3D() != null) existing = p.getOffset3D().getBlock();
+		setBlock(existing, new ItemStack(0, p.getDispensed().getAmount(), (byte) 0), p.applyPhysics(), p);
+		return 0;
+	}
 
 }

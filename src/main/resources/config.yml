@@ -1,7 +1,8 @@
 #Keeps track of what version your config is in case a new
 #modifier is released and needs to be added to your config.
-CONFIG_VERSION: 8
+CONFIG_VERSION: 9
 AUTOMATICALLY_UPDATE_CONFIG_ON_UPDATE: true
+MAXIMUM_BLUEPRINT_CUBOID_SIZE: 512
 
 #Remove or comment out line to remove a modifier from Gadget
 #Format: dataValue:ink

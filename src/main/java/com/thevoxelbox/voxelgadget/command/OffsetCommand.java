@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 
 public class OffsetCommand implements CommandExecutor {
 
+	@Override
 	public boolean onCommand(CommandSender cs, Command cmnd, String label, String[] args) {
 		Player p = (Player) cs;
 

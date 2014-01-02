@@ -75,8 +75,6 @@ public class BlueprintHandler {
 			lore.add("AN ERROR OCCURED:");
 			lore.add(message);
 			book.getItemMeta().setLore(lore);
-			System.out.println(book.getItemMeta());
-			e.printStackTrace(System.out);
 		}
 	}
 
@@ -151,7 +149,7 @@ public class BlueprintHandler {
 				if (entry.getValue().equals(existing)) existsCount += 1;
 			}
 		}
-		System.out.println(existsCount + " exists out of " + totalBlocks + " relevant blocks.");
+		//System.out.println(existsCount + " exists out of " + totalBlocks + " relevant blocks.");
 
 		return totalBlocks == 0 ? false : existsCount > (totalBlocks - (totalBlocks / 4));
 	}
@@ -213,9 +211,6 @@ public class BlueprintHandler {
 		ALL(new AbstractStampMode() {
 			@Override
 			public void setBlock(Block block, ComboBlock newBlock, ComboBlock blueprintBlock) {
-				if(newBlock.getID() == 0){
-					System.out.println(new ComboBlock(block) + " >>> " + newBlock + "    :::::     " + blueprintBlock);
-				}
 				block.setTypeId(newBlock.getID(), false);
 				block.setData(newBlock.getData(), false);
 			}

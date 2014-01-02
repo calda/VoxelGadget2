@@ -14,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
 public class SaveCommand implements CommandExecutor {
 
@@ -51,7 +50,7 @@ public class SaveCommand implements CommandExecutor {
 		String name = args[1];
 		if (args.length > 2) {
 			String possibleMode = args[2];
-			for(BlueprintHandler.StampMode m : BlueprintHandler.StampMode.values()) {
+			for (BlueprintHandler.StampMode m : BlueprintHandler.StampMode.values()) {
 				if (m.toString().equalsIgnoreCase(possibleMode)) {
 					mode = m;
 					break;

@@ -56,7 +56,7 @@ public class GadgetListener implements Listener {
 		}
 	}
 
-	final private int CONFIG_VERSION = 9; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
+	final private int CONFIG_VERSION = 10; //MUST UPDATE WHENEVER THE CONFIG IS CHANGED
 
 	/**
 	 * Loads the configuration for VoxelGadget2.

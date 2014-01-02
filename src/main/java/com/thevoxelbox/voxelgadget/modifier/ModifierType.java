@@ -12,7 +12,7 @@ public enum ModifierType {
 	NO_PHYSICS(new NoPhysicsModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 8)),
 	OVERRIDE(new OverrideModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 14)),
 	INVENTORY(new InventoryModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 12)),
-	THREE_DIM(new ThreeDimModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 13)),
+	OFFSET_3D(new Offset3DModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 13)),
 	TIMER(new TimerModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 7)),
 	LINE(new LineModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 2)),
 	AREA(new AreaModifier(), Type.SPECIAL, new ComboBlock(Material.WOOL, (byte) 1)),
@@ -32,6 +32,7 @@ public enum ModifierType {
 	SET_INVENTORY(new SetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 13)),
 	GET_INVENTORY(new GetInventoryModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 3)),
 	GET_BLOCK(new GetBlockModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 8)),
+	GET_BLUEPRINT(new GetBlueprintModifier(), Type.MODE_OVERRIDE, new ComboBlock(Material.STAINED_CLAY, (byte) 6)),
 	INVERT_CHECK(new InvertCheckModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 14)),
 	CHECK_PLAYER(new CheckPlayerModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 10)),
 	CHECK_LESS(new CheckLessModifier(), Type.CHECK, new ComboBlock(Material.STAINED_CLAY, (byte) 2)),
@@ -59,7 +60,9 @@ public enum ModifierType {
 	 * Calls the modify() method of the Modifier
 	 *
 	 * @param p the Processor that called the method
-	 * @return true if the modifications were successful
+	 * @param currentBlock the Modifier Block
+	 * @param nextBlock the block following the Modifier in the tail
+	 * @return the number of blocks to skip in the tail
 	 */
 	public int callModify(Processor p, Block currentBlock, Block nextBlock) {
 		if (modifier != null) return modifier.modify(p, currentBlock, nextBlock);

@@ -115,16 +115,22 @@ public class SaveCommand implements CommandExecutor {
 			}
 			book.add("*BLUEPRINT COMPLETE");
 			//save contents to the book
-			int numPages = (book.size() / 10) + (book.size() % 10 > 0 ? 1 : 0);
+			StringBuilder bookContent = new StringBuilder();
+			for (String line : book) {
+				bookContent.append(line).append("\n");
+			}
+			char[] bookChars = bookContent.toString().toCharArray();
+			int numPages = (bookChars.length / 256) + (bookChars.length % 256 > 0 ? 1 : 0);
 			if (numPages > 50) {
 				throw new Exception("These dimentions (" + dimX + "," + dimY + "," + dimZ + ") would result in a book with more pages ("
 						+ numPages + ") than the Minecraft-imposed maximum (50).");
 			}
 			for (int i = 0; i < numPages; i++) {
-				int startingIndex = i * 10;
+				int startingIndex = i * 256;
 				StringBuilder bookPage = new StringBuilder();
-				for (int j = startingIndex; j <= Math.min(startingIndex + 9, book.size() - 1); j++) {
-					bookPage.append(book.get(j)).append("\n");
+				//System.out.println("Page " + (i + 1) + ": " + startingIndex + " - " + (startingIndex + 255));
+				for (int j = startingIndex; j < Math.min(startingIndex + 256, bookChars.length); j++) {
+					bookPage.append(bookChars[j]);
 				}
 				meta.addPage(bookPage.toString());
 			}

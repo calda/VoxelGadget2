@@ -88,9 +88,13 @@ public class BlueprintHandler {
 
 	private ArrayList<String> getLines(BookMeta meta) {
 		ArrayList<String> lines = new ArrayList<String>();
+		StringBuilder sb = new StringBuilder();
 		for (String page : meta.getPages()) {
-			lines.addAll(Arrays.asList(page.split("\n")));
+			sb.append(page);
 		}
+		String bookContent = sb.toString();
+		lines.addAll(Arrays.asList(bookContent.split("\n")));
+		System.out.println(lines);
 		return lines;
 	}
 

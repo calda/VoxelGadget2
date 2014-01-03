@@ -1,12 +1,15 @@
 package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
+import java.util.ArrayList;
+import java.util.Random;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Dispenser;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 
 public class PatchModifier extends AbstractModifier {
 
@@ -14,7 +17,7 @@ public class PatchModifier extends AbstractModifier {
 	public int modify(Processor p, Block currentBlock, Block nextBlock) {
 		if (nextBlock.getState() instanceof InventoryHolder) {
 			if (nextBlock.getState() instanceof Dispenser) {
-				for (BlockFace face : p.FACES) {
+				for (BlockFace face : Processor.FACES) {
 					if (p.getModifierFromConfig(new ComboBlock(nextBlock.getRelative(face))) == ModifierType.PATCH) {
 						ModifierType behindDispenser = p.getModifierFromConfig(new ComboBlock(nextBlock.getRelative(face.getOppositeFace())));
 						if (behindDispenser != null && behindDispenser.getType() == ModifierType.Type.MODE) {
@@ -33,8 +36,8 @@ public class PatchModifier extends AbstractModifier {
 				Block patchStart = patchBlock.getLocation().add(offsetTemp).getBlock();
 				//System.out.println(patchStart.getType());
 				BlockFace patchTail = null;
-				if (ModifierType.PATCH.getDefaultBlock().equals(new ComboBlock(patchStart))) {
-					for (BlockFace face : p.FACES) {
+				if (p.getModifierFromConfig(new ComboBlock(patchStart)) == ModifierType.PATCH) {
+					for (BlockFace face : Processor.FACES) {
 						ModifierType type = p.getModifierFromConfig(new ComboBlock(patchStart.getRelative(face)));
 						if (type != null) {
 							patchTail = face;
@@ -50,17 +53,32 @@ public class PatchModifier extends AbstractModifier {
 						//System.out.println(modifier);
 						if (modifier == ModifierType.PATCH) return 1;
 						if (modifier.getType() != ModifierType.Type.CHECK) {
-							int skip = modifier.callModify(p, nextInTail ,patchStart.getRelative(patchTail, current + 1));
+							int skip = modifier.callModify(p, nextInTail, patchStart.getRelative(patchTail, current + 1));
 							current += skip;
 						}
 					}
-				} else return 1;
-			} catch (NullPointerException e) {
+				} else if (patchStart.getState() instanceof Dispenser) {
+					Dispenser disp = (Dispenser) patchStart.getState();
+					//get a random item from the dispenser to simulate it being triggered
+					ArrayList<ItemStack> itemsList = new ArrayList<>();
+					for (int i = 0; i < 9; i++) {
+						ItemStack item = disp.getInventory().getItem(i);
+						if (item != null && item.getTypeId() != 0) {
+							itemsList.add(item);
+						}
+					}
+					if (itemsList.size() > 0) {
+						ItemStack random = itemsList.get((new Random()).nextInt(itemsList.size()));
+						for (BlockFace face : Processor.FACES) {
+							p.getNewProcessor().process(disp.getBlock(), face, random, true);
+						}
+					}
+				}
+			} catch (Exception e) {
 				return 0;
 			}
 			return 1;
 		}
 		return 0;
 	}
-
 }

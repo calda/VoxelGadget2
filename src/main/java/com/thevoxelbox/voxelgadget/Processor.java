@@ -498,4 +498,9 @@ public class Processor {
 	public void setTriggerExtendsTimer(boolean triggerExtendsTimers) {
 		this.triggerExtendsTimer = triggerExtendsTimers;
 	}
+	
+	public Processor getNewProcessor(){
+		return new Processor(config, gadget);
+	}
+	
 }

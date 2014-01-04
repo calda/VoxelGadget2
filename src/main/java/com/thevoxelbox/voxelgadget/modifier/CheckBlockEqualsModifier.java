@@ -4,6 +4,9 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author CalDaBeast
+ */
 public class CheckBlockEqualsModifier extends AbstractCheckModifier {
 
 	@Override

@@ -5,6 +5,9 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * @author CalDaBeast
+ */
 public class VoxelGadget extends JavaPlugin {
 
     protected static final Logger log = Logger.getLogger("Minecraft");

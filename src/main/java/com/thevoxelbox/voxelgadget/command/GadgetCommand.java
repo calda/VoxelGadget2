@@ -6,6 +6,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+/**
+ * @author CalDaBeast
+ */
 public class GadgetCommand implements CommandExecutor {
 
 	public final static String VOXEL_GADGET = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_PURPLE + "Voxel"

@@ -13,6 +13,9 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+/**
+ * @author CalDaBeast
+ */
 public class OffsetCommand implements CommandExecutor {
 
 	@Override

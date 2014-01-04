@@ -5,6 +5,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author CalDaBeast
+ */
 public class AreaModifier extends AbstractModifier {
 
 	@Override

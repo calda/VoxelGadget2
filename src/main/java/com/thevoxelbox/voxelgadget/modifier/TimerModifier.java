@@ -4,6 +4,9 @@ package com.thevoxelbox.voxelgadget.modifier;
 import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.block.Block;
 
+/**
+ * @author CalDaBeast
+ */
 public class TimerModifier extends AbstractModifier {
 	
 	@Override

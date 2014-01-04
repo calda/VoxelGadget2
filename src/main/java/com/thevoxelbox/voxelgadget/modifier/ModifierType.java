@@ -4,6 +4,9 @@ import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+/**
+ * @author CalDaBeast
+ */
 public enum ModifierType {
 
 	PLACE(new BlockPlaceMode(), Type.MODE, new ComboBlock(Material.IRON_BLOCK)),

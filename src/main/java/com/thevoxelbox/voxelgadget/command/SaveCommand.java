@@ -15,6 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+/**
+ * @author CalDaBeast
+ */
 public class SaveCommand implements CommandExecutor {
 
 	protected final static HashMap<String, Location[]> POINTS = new HashMap<String, Location[]>();

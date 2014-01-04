@@ -10,6 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+/**
+ * @author CalDaBeast
+ */
 public class CopyCommand implements CommandExecutor{
 
 	@Override

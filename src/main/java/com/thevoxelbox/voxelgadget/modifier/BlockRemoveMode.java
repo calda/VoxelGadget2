@@ -4,6 +4,9 @@ import com.thevoxelbox.voxelgadget.Processor;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author CalDaBeast
+ */
 public class BlockRemoveMode extends AbstractModeModifier {
 
 	@Override

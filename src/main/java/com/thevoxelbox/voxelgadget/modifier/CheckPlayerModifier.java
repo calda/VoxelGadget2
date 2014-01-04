@@ -13,8 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
- *
- * @author Piotr Przerwa <przerwap@gmail.com>
+ * @author przerwarp, edited by CalDaBeast
  */
 class CheckPlayerModifier extends AbstractCheckModifier {
 

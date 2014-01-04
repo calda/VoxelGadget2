@@ -8,6 +8,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author CalDaBeast
+ */
 public class GetBlockModifier extends AbstractModeModifier {
 
     @Override

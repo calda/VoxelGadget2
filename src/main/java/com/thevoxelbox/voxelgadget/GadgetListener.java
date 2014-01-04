@@ -17,6 +17,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * @author CalDaBeast
+ */
 public class GadgetListener implements Listener {
 
 	final VoxelGadget gadget;

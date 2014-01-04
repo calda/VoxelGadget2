@@ -8,7 +8,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * A special Modifier to easily create multiple OffsetModifiers which all do the same thing with different values.
+ * @author CalDaBeast
  */
 public class DecoderModifier extends AbstractModifier {
 

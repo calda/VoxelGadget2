@@ -6,7 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * A combined class to store the ID and data/ink of a block
- */
+ * @author CalDaBeast 
+*/
 public class ComboBlock {
 
     final private int id;

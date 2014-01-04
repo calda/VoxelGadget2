@@ -6,6 +6,9 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+/**
+ * @author CalDaBeast
+ */
 public class SetInventoryModifier extends AbstractModeModifier {
 
     @Override

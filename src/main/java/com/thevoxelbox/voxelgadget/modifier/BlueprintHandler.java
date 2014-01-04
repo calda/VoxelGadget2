@@ -10,6 +10,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * @author CalDaBeast
+ */
 public class BlueprintHandler {
 
 	//borrowed from VoxelSniper's Undo.java

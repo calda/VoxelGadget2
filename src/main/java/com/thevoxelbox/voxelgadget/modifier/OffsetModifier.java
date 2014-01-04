@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 
 /**
  * A special Modifier to easily create multiple OffsetModifiers which all do the same thing with different values.
+ * @author CalDaBeast
  */
 public class OffsetModifier extends AbstractModifier {
 

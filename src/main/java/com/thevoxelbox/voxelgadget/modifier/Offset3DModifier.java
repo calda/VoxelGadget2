@@ -7,7 +7,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
 /**
- * A special Modifier to easily create multiple OffsetModifiers which all do the same thing with different values.
+ * @author CalDaBeast
  */
 public class Offset3DModifier extends AbstractModifier {
 	

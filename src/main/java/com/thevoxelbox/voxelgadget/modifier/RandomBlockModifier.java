@@ -2,7 +2,6 @@ package com.thevoxelbox.voxelgadget.modifier;
 
 import com.thevoxelbox.voxelgadget.Processor;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Random;
 import org.bukkit.block.Block;
@@ -10,6 +9,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author CalDaBeast
+ */
 public class RandomBlockModifier extends AbstractModifier {
 
 	@Override

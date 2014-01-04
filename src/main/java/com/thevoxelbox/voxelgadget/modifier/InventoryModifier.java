@@ -8,6 +8,9 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author CalDaBeast
+ */
 class InventoryModifier extends AbstractModifier {
 
     @Override

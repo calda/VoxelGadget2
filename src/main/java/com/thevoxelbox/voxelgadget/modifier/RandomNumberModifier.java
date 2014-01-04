@@ -6,6 +6,9 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
+/**
+ * @author CalDaBeast
+ */
 public class RandomNumberModifier extends AbstractModifier {
 
 	@Override

@@ -17,7 +17,6 @@ public class BlockPlaceMode extends AbstractModeModifier {
 				blueprint.paste(p.getTargetLocation());
 			} catch (Exception e) {
 				BlueprintHandler.handleException(e, p.getDispensed());
-				System.out.println(p.getDispensed().getItemMeta());
 			}
 			return 0;
 		}

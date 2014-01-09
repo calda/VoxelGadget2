@@ -97,7 +97,6 @@ public class BlueprintHandler {
 		}
 		String bookContent = sb.toString();
 		lines.addAll(Arrays.asList(bookContent.split("\n")));
-		System.out.println(lines);
 		return lines;
 	}
 

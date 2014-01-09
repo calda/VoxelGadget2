@@ -25,7 +25,7 @@ class CheckPlayerModifier extends AbstractCheckModifier {
             double r = p.getOffset();
             for (Player pl : p.getDispenser().getWorld().getPlayers()) {
                 if (pl.getLocation().toVector().isInSphere(v, r)) {
-                    p.setCheck(true);
+                    p.setCheck(true || p.getCheck());
                     return 0;
                 }
             }
@@ -36,7 +36,7 @@ class CheckPlayerModifier extends AbstractCheckModifier {
             for (Player pl : p.getDispenser().getWorld().getPlayers()) {
                 Location ploc = pl.getLocation();
                 if (ploc.getBlockX() == x && ploc.getBlockY() == y && ploc.getBlockZ() == z) {
-                    p.setCheck(true);
+                    p.setCheck(true || p.getCheck());
                     return 0;
                 }
             }

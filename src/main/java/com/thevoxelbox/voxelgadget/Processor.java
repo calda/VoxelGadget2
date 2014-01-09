@@ -2,11 +2,9 @@ package com.thevoxelbox.voxelgadget;
 
 import com.thevoxelbox.voxelgadget.modifier.ComboBlock;
 import com.thevoxelbox.voxelgadget.modifier.ModifierType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,14 +43,13 @@ public class Processor {
 	private int current = 0;
 	private boolean check = false;
 	private boolean checkEnabled = false;
-	private Inventory invOverride = null;
 
 	public Processor(Map<Integer, ModifierType> config, VoxelGadget gadget) {
 		this.config = config;
 		this.gadget = gadget;
 	}
 
-	private final HashMap<Block, ModifierType> checkLater = new HashMap<>();
+	private final ArrayList<Entry<Entry<Block, Block>, ModifierType>> checkLater = new ArrayList<>();
 	private static final HashMap<Location, Integer> inProgressTimers = new HashMap<>();
 
 	/**
@@ -93,19 +90,23 @@ public class Processor {
 			if (modifier == null) {
 				break;
 			} else if (modifier.getType() == ModifierType.Type.CHECK) {
-				checkLater.put(nextInTail, modifier);
 				Block behind = dispenser.getRelative(getTail(), current + 1);
+				Inventory inventory = null;
 				if (behind.getState() instanceof InventoryHolder) {
-					this.setInvOverride(((InventoryHolder) behind.getState()).getInventory());
+					inventory = ((InventoryHolder) behind.getState()).getInventory();
 					current++;
 				}
+				Entry<Block, Block> block = new SimpleEntry<>(nextInTail, behind);
+				checkLater.add(new SimpleEntry<>(block, modifier));
+
 			} else {
 				int skip = modifier.callModify(this, nextInTail, dispenser.getRelative(getTail(), current + 1));
 				current += skip;
 			}
 		}
-		for (Entry<Block, ModifierType> entry : checkLater.entrySet()) {
-			entry.getValue().callModify(this, entry.getKey(), dispenser.getRelative(getTail(), current + 1));
+		for (Entry<Entry<Block, Block>, ModifierType> entry : checkLater) {
+			System.out.println(entry.getValue());
+			entry.getValue().callModify(this, entry.getKey().getKey(), entry.getKey().getValue());
 		}
 		if (initial && isTimerEnabled()) {
 			final Processor owner = this;
@@ -138,16 +139,8 @@ public class Processor {
 						Block possibleGadget = lastModifierBlock.getRelative(face);
 						if (possibleGadget.getState() instanceof Dispenser) {
 							Dispenser disp = (Dispenser) possibleGadget.getState();
-							//get a random item from the dispenser to simulate it being triggered
-							ArrayList<ItemStack> itemsList = new ArrayList<>();
-							for (int i = 0; i < 9; i++) {
-								ItemStack item = disp.getInventory().getItem(i);
-								if (item != null && item.getTypeId() != 0) {
-									itemsList.add(item);
-								}
-							}
-							if (itemsList.size() > 0) {
-								ItemStack random = itemsList.get((new Random()).nextInt(itemsList.size()));
+							ItemStack random = getRandomBlockFromInventory(disp.getInventory());
+							if (random != null) {
 								boolean wasAGadget = false;
 								for (BlockFace possibleTail : FACES) {
 									boolean isATail = (new Processor(config, gadget)).process(disp.getBlock(), possibleTail, random, true);
@@ -187,6 +180,25 @@ public class Processor {
 			if (!willSkipFirst()) getMode().callModeModify(this);
 			return true;
 		}
+	}
+
+	/**
+	 * Gets a random block 
+	 * 
+	 * @param inv the Inventory to get a random block from
+	 * @return null if the passed Inventory was null or there were 
+	 * no blocks inside it. else will return a random block from inside the inventory.
+	 */
+	public static ItemStack getRandomBlockFromInventory(Inventory inv) {
+		if(inv == null) return null;
+		ArrayList<ItemStack> itemsList = new ArrayList<>();
+		for (int i = 0; i < inv.getSize(); i++) {
+			ItemStack item = inv.getItem(i);
+			if (item != null && item.getTypeId() != 0) {
+				itemsList.add(item);
+			}
+		}
+		return (itemsList.size() > 0 ? itemsList.get((new Random()).nextInt(itemsList.size())) : null);
 	}
 
 	/**
@@ -466,14 +478,6 @@ public class Processor {
 		return checkEnabled;
 	}
 
-	public Inventory getInvOverride() {
-		return invOverride;
-	}
-
-	public void setInvOverride(Inventory invOverride) {
-		this.invOverride = invOverride;
-	}
-
 	/**
 	 * @return the skipFirstWithTimer
 	 */
@@ -501,9 +505,9 @@ public class Processor {
 	public void setTriggerExtendsTimer(boolean triggerExtendsTimers) {
 		this.triggerExtendsTimer = triggerExtendsTimers;
 	}
-	
-	public Processor getNewProcessor(){
+
+	public Processor getNewProcessor() {
 		return new Processor(config, gadget);
 	}
-	
+
 }

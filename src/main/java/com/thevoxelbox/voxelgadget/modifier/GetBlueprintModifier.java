@@ -13,6 +13,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class GetBlueprintModifier extends AbstractModeModifier {
 
+	private Inventory invOverride = null;
+
 	@Override
 	public int modify(Processor p, Block currentBlock, Block behind1) {
 		Block behind2 = currentBlock.getRelative(currentBlock.getFace(behind1), 2);
@@ -21,16 +23,25 @@ public class GetBlueprintModifier extends AbstractModeModifier {
 			if (behind2.getState() instanceof InventoryHolder) {
 				if (behind3.getState() instanceof InventoryHolder) {
 					p.setMode(ModifierType.GET_BLUEPRINT);
-					p.setInvOverride(((InventoryHolder) behind1.getState()).getInventory());
+					invOverride = ((InventoryHolder) behind1.getState()).getInventory();
 					return 3;
-				} else return 2;
-			} else return 1;
-		} else return 0;
+				} else {
+					invOverride = null;
+					return 2;
+				}
+			} else {
+				invOverride = null;
+				return 1;
+			}
+		} else {
+			invOverride = null;
+			return 0;
+		}
 	}
 
 	@Override
 	public int modeModify(Processor p) {
-		Inventory inv1 = p.getInvOverride();
+		Inventory inv1 = invOverride;
 		Block invBlock1 = ((BlockState) inv1.getHolder()).getBlock();
 		BlockFace otherInvFace = null;
 		for (BlockFace face : Processor.FACES) {

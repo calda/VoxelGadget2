@@ -12,13 +12,16 @@ import org.bukkit.inventory.ItemStack;
  */
 public class GetInventoryModifier extends AbstractModeModifier {
 
+	private Inventory invOverride = null;
+	
     @Override
     public int modify(Processor p, Block currentBlock, Block nextBlock) {
         p.setMode(ModifierType.GET_INVENTORY);
         if (nextBlock.getState() instanceof InventoryHolder) {
-            p.setInvOverride(((InventoryHolder) nextBlock.getState()).getInventory());
+            invOverride = ((InventoryHolder) nextBlock.getState()).getInventory();
             return 1;
         }
+		invOverride = null;
         return 0;
     }
 
@@ -27,7 +30,7 @@ public class GetInventoryModifier extends AbstractModeModifier {
         Block existing = p.getTargetBlock();
         if (existing.getState() instanceof InventoryHolder) {
             InventoryHolder target = (InventoryHolder) existing.getState();
-            final Inventory disp = ((p.getInvOverride() == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : p.getInvOverride());
+            final Inventory disp = ((invOverride == null) ? ((Dispenser) p.getDispenser().getState()).getInventory() : invOverride);
             final ItemStack[] newInventory = new ItemStack[disp.getSize()];
             if (p.getOverride() != null) {
                 if (target.getInventory().contains(p.getOverride().getType())) {

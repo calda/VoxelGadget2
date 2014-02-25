@@ -36,6 +36,7 @@ public class GadgetListener implements Listener {
 	 */
 	@EventHandler
 	public void onDispenserDispense(BlockDispenseEvent e) {
+        if(e.getBlock().getType() != Material.DISPENSER) return;
 		boolean wasAGadget = false;
 		for (BlockFace face : Processor.FACES) {
 			boolean hadTail = (new Processor(config, gadget).process(e.getBlock(), face, e.getItem(), true));

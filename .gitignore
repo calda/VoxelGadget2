@@ -5,6 +5,7 @@
 
 # netbeans
 nbproject
+/src/test/
 
 # maven
 /*/target/
